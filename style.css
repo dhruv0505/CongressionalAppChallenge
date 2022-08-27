@@ -31,9 +31,8 @@ a{
 }
 .homeDashboard{
     display:grid;
-    height: 645px;
     width:1200px;
-    grid-template-rows: 45% 35% 20%;
+    grid-template-rows: 292px 220px auto;
     grid-template-columns: 50% 15% 35%;
     column-gap:10px;
 }
@@ -45,6 +44,7 @@ a{
     grid-column:3;
     grid-row:2;
     text-align:center;
+    height:100%;
 }
 .accountInfo{
     font-family: 'Quicksand', sans-serif;
@@ -53,8 +53,12 @@ a{
 }
 .account{
     background-color:#282828;
-    height:100%;
     width:100%;
+}
+.accountHolder{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
 }
 /* width */
 ::-webkit-scrollbar {
