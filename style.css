@@ -1,0 +1,31 @@
+body{
+    background-color:gray;
+}
+.nav{
+    top:0;
+    background-color:maroon;
+    position:fixed;
+    color:#000000;
+    /* color:rgb(83, 83, 255); */
+    font-size: 25px;
+    filter: drop-shadow(5px 6px 3px #282828);
+    width:100%;
+}
+.centerContainer{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.navOption:hover{
+    background-color:rgb(128, 80, 80);
+}
+a{
+    padding:15px;
+    border-radius:20px;
+    color:black;
+    /* color:rgb(83, 83, 255); */
+    text-decoration:none;
+}
+.material-symbols-rounded{
+    color:rgb(40, 40, 40);
+}
