@@ -32,7 +32,7 @@ a{
 .homeDashboard{
     display:grid;
     height:700px;
-    width:1500px;
+    width:1200px;
     grid-template-rows: 75% 25%;
     grid-template-columns: 50% 25% 25%;
 }
@@ -46,7 +46,4 @@ a{
     width:100%;
     text-align:center;
     font-family: 'Quicksand', sans-serif;
-}
-.homeBody{
-    display:flex;
 }
