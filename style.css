@@ -6,12 +6,12 @@ body{
     background-color:maroon;
     position:fixed;
     color:#000000;
-    /* color:rgb(83, 83, 255); */
-    font-size: 25px;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
     filter: drop-shadow(5px 6px 3px #282828);
     width:100%;
 }
-.centerContainer{
+.centerContainer, .navOption{
     display:flex;
     align-items:center;
     justify-content:center;
