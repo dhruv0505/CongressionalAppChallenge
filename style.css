@@ -31,19 +31,33 @@ a{
 }
 .homeDashboard{
     display:grid;
-    height:700px;
+    height:645px;
     width:1200px;
-    grid-template-rows: 75% 25%;
-    grid-template-columns: 50% 25% 25%;
+    grid-template-rows: 35% 50% 15%;
+    grid-template-columns: 50% 15% 35%;
 }
 .challengeFeature{
     grid-column:1/2;
-    grid-row:1;
+    grid-row:1/span 2;
 }
 .recentPosts{
     grid-column:3;
     grid-row:1;
-    width:100%;
     text-align:center;
     font-family: 'Quicksand', sans-serif;
 }
+/* width */
+::-webkit-scrollbar {
+    width: 17px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #282828;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(0, 60, 138);
+    border-radius:10px;
+  }
