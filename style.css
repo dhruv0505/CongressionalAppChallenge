@@ -31,10 +31,11 @@ a{
 }
 .homeDashboard{
     display:grid;
-    height:645px;
+    height: 645px;
     width:1200px;
-    grid-template-rows: 35% 50% 15%;
+    grid-template-rows: 45% 35% 20%;
     grid-template-columns: 50% 15% 35%;
+    column-gap:10px;
 }
 .challengeFeature{
     grid-column:1/2;
@@ -42,9 +43,18 @@ a{
 }
 .recentPosts{
     grid-column:3;
-    grid-row:1;
+    grid-row:2;
     text-align:center;
+}
+.accountInfo{
     font-family: 'Quicksand', sans-serif;
+    color:gray;
+    font-size:20px;
+}
+.account{
+    background-color:#282828;
+    height:100%;
+    width:100%;
 }
 /* width */
 ::-webkit-scrollbar {
