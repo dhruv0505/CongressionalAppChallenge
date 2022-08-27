@@ -55,10 +55,14 @@ a{
     background-color:#282828;
     width:100%;
 }
-.accountHolder{
+.accountHolder, .recentPosts{
     display:flex;
     align-items:flex-end;
     justify-content:center;
+}
+.following{
+    grid-column:1/span 3;
+    grid-row:3;
 }
 /* width */
 ::-webkit-scrollbar {
