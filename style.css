@@ -63,7 +63,26 @@ a{
 .following{
     grid-column:1/span 3;
     grid-row:3;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
+.following td, .following th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+.following tr:nth-child(even){background-color: #f2f2f2;}
+
+.following tr:hover {background-color: #ddd;}
+
+.following th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #3096ea;
+    color: white;
+  }
+
 /* width */
 ::-webkit-scrollbar {
     width: 17px;
