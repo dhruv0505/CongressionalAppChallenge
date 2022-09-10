@@ -11,7 +11,7 @@ body{
     filter: drop-shadow(5px 6px 3px #282828);
     width:100%;
 }
-.centerContainer, .navOption{
+.centerContainer, .navOption, .group{
     display:flex;
     align-items:center;
     justify-content:center;
@@ -71,6 +71,9 @@ a{
     border-collapse: collapse;  
     font-family: 'Quicksand', sans-serif;
 }
+.allGroupsDashboard{
+    font-family: 'Quicksand', sans-serif;
+}
 .following td, .following th, .leaderboard td, .leaderboard th{
     border: 1px solid #ddd;
     border-radius:5px;
@@ -86,8 +89,30 @@ a{
     text-align: left;
     background-color: rgb(0, 60, 138);
     color: rgb(200,200,200);
-  }
-
+}
+.createGroup{
+    border:none;
+    font-family: 'Quicksand', sans-serif;
+}
+.createGroup:hover{
+    background-color:#28282850
+}
+.group{
+    background-color: rgb(200,200,200);
+    margin:15px;
+    width:360px;
+    border-color: rgb(0, 60, 138);
+    border-width:2px;
+    border-style:solid;
+    height:500px;
+    border-radius:5px;
+}
+.textGroup > img{
+    border-radius:30px;
+}
+.allGroupsDashboard tr{
+    margin:10px;
+}
 /* width */
 ::-webkit-scrollbar {
     width: 17px;
