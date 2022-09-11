@@ -218,6 +218,9 @@ a{
     font-weight: bold;
     font-size: 1.2rem;
   }
+  .number{
+    font-family: 'Bebas Neue', cursive;
+  }
   .score-card .leader .user .user-pic {
     background: #800000;
     border-radius: 50%;
@@ -239,7 +242,7 @@ a{
   .user-name{
     width:400px;
     font-size:30px;
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Shadows Into Light', cursive;
   }
   .score-card{
     left:0px;
