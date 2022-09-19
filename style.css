@@ -94,7 +94,7 @@ a {
 }
 
 .material-symbols-rounded {
-    filter: invert(9%) sepia(56%) saturate(0%) hue-rotate(195deg) brightness(101%) contrast(85%);
+    position:static;
 }
 
 /* MAIN PAGES */
@@ -114,6 +114,13 @@ a {
 .challengeFeature {
     grid-column: 1/2;
     grid-row: 1/span 2;
+}
+
+.challengeFeatureTitle{
+    font-family: 'Quicksand', sans-serif;
+    position:relative;
+    font-size:50px;
+    right:400px;
 }
 
 .recentPosts {
@@ -181,9 +188,7 @@ a {
     font-family: 'Bebas Neue', cursive;
     grid-row:4;
 }
-/* LEADERBOARD + FOLLOWING */
-.following td,
-.following th,
+/* LEADERBOARD */
 .leaderboard td,
 .leaderboard th {
     border: 1px solid #ddd;
@@ -191,13 +196,11 @@ a {
     padding: 8px;
 }
 
-.following tr,
 .leaderboard tr {
     background-color: rgb(200, 200, 200);
     color: #282828;
 }
 
-.following th,
 .leaderboard th {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -206,7 +209,6 @@ a {
     color: rgb(200, 200, 200);
 }
 
-/* LEADERBOARD */
 .leaderboard {
     border-collapse: collapse;
     font-family: 'Quicksand', sans-serif;
@@ -252,9 +254,10 @@ a {
 }
 
 .score-card .leader .user {
-    padding: 2px;
-    display: flex;
-    align-items: center;
+    padding: 0px;
+    width:100px;
+    height:60px;
+    align-items:center;
     border-radius: 16px;
     border: 1px solid #ebedf6;
 }
@@ -262,18 +265,20 @@ a {
 .score-card .leader .user .number {
     padding: 3px 7px 3px;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 32px;
+    left:0;
 }
 
 .number {
     font-family: 'Bebas Neue', cursive;
+    font-size:50px;
 }
 
 .score-card .leader .user .user-pic {
-    background: #800000;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 50px;
+    height: 50px;
+    right:0;
 }
 
 .score-card .leader .user-info {
