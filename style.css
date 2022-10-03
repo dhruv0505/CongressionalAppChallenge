@@ -103,8 +103,8 @@ a {
     display: grid;
     width: 1200px;
     grid-template-rows: 292px 220px auto;
-    grid-template-columns: 50% 15% 35%;
-    column-gap: 10px;
+    grid-template-columns: 768px 412px;
+    column-gap: 20px;
 }
 
 .allGroupsDashboard {
@@ -113,12 +113,34 @@ a {
 
 /* HOME */
 .challengeFeature {
-    grid-column: 1/2;
+    grid-column: 1;
     grid-row: 1/span 2;
+    background-image: url("environmentIMG.jpg");
+    background-repeat:none;
+    border-radius:60px;
+    background-size: 768px 512px;
+}
+
+.challengeTitle{
+    color:white;
+    font-size:40px;
+    font-family: 'Quicksand', sans-serif;  
+    text-shadow: 1px 1px 25px black, 0 0 25px black, 0 0 25px black; 
+    /* text-shadow: 2px 2px 4px black; */
+}
+
+.taskCompletionButton{
+    padding:10px;
+    font-size:30px;
+    background-color: rgba(120,120,120,0.5);
+    font-family: 'Bebas Neue', cursive;
+}
+.taskCompletionButton:hover{
+    background-color: #379683;
 }
 
 .recentPosts {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 2;
     text-align: center;
     height: 100%;
@@ -143,7 +165,7 @@ a {
 }
 
 .following {
-    grid-column: 1/span 3;
+    grid-column: 1/span 2;
     grid-row: 3;
     border-collapse: collapse;
     width: 100%;
@@ -334,14 +356,19 @@ a {
     margin: 10px;
 }
 
-/* CHALLENGE PAGE */
-.challengeDescription{
-    background-color: rgb(165, 151, 151);
-    padding:10px;
-    width:400px;
-    font-family: 'Quicksand', sans-serif;
-    border-bottom-left-radius:5px;
-    border-top-left-radius:5px;
+/* CREATE */
+.createDashboard{
+    display:flex;
+    justify-content:center;
+}
+#log{
+    height:20px; 
+    bottom:0px;
+}
+
+/* GROUP PAGE */
+.groupPageDashboard{
+    display:grid;
 }
 
 /*Add icons of most recent activity done in red box*/
