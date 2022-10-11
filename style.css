@@ -67,7 +67,7 @@ body {
     background-color: maroon;
     position: fixed;
     color: #000000;
-    font-family: 'Bebas Neue', cursive;
+    font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
     filter: drop-shadow(5px 6px 3px #282828);
     width: 100%;
@@ -133,7 +133,7 @@ a {
     padding:10px;
     font-size:30px;
     background-color: rgba(120,120,120,0.5);
-    font-family: 'Bebas Neue', cursive;
+    font-family: 'Bebas Neue', sans-serif;
 }
 .taskCompletionButton:hover{
     background-color: #379683;
@@ -201,7 +201,7 @@ a {
 .followingActivity{
     font-size:60px;
     grid-column:3;
-    font-family: 'Bebas Neue', cursive;
+    font-family: 'Bebas Neue', sans-serif;
     grid-row:4;
 }
 /* LEADERBOARD + FOLLOWING */
@@ -260,14 +260,13 @@ a {
     margin: 1rem 0 2rem 0;
     display: flex;
     flex-direction: column;
-    width: 100%;
 }
 
 .score-card .leader {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    min-height: 60px;
+    height:45px;
 }
 
 .score-card .leader:not(:first-child) {
@@ -275,28 +274,32 @@ a {
 }
 
 .score-card .leader .user {
-    padding: 2px;
+    padding: 5px;
     display: flex;
     align-items: center;
+    width:80px;
+    height:40px;
     border-radius: 16px;
     border: 1px solid #ebedf6;
 }
 
 .score-card .leader .user .number {
-    padding: 3px 7px 3px;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    padding-right: 20px;
+    padding-left:5px;
 }
 
 .number {
-    font-family: 'Bebas Neue', cursive;
+    font-family: 'Bebas Neue', sans-serif;
 }
 
 .score-card .leader .user .user-pic {
     background: #800000;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 45px;
+    height: 45px;
 }
 
 .score-card .leader .user-info {
@@ -313,9 +316,9 @@ a {
 }
 
 .user-name {
-    width: 400px;
+    width: 300px;
     font-size: 30px;
-    font-family: 'Shadows Into Light', cursive;
+    font-family: 'Bebas Neue', sans-serif;
 }
 
 .score-card {
@@ -369,7 +372,98 @@ a {
 /* GROUP PAGE */
 .groupPageDashboard{
     display:grid;
+    grid-template-columns: 35% 65%;
+    grid-template-rows: 45px 560px 65px auto;
+    row-gap:10px;
+    column-gap:25px;
 }
+.titleGroupPage{
+    font-size:50px;
+    grid-row:1;
+    grid-column:1;
+    font-family: 'Bebas Neue', sans-serif;
+}
+.groupChallengeCompletion{
+    grid-row:2/span 2;
+    grid-column:1;
+}
+.groupChallenge{
+    background-color:maroon;
+    padding:5px;
+    border-radius:3px;
+    height:100px;
+    width:100%;
+    font-family: 'Bebas Neue', sans-serif;
+}
+.leaderboardGroupPage{
+    grid-row:1/span 3;
+    width: 100%;
+    border-radius:3px;
+    grid-column:2;
+}
+.peopleGroupPageTitle{
+    grid-column:1;
+    grid-row:3;
+    font-size:40px;
+    font-family: 'Quicksand', cursive;
+}
+.people{
+    grid-column:1/span 2;
+    grid-row:4;
+}
+
+/* LOGIN */
+.loginBox{
+    width:400px;
+    background-color:#282828;
+    height:290px;
+    border-radius:10px;
+    padding-top:5px;
+}
+.signupBox{
+    width:400px;
+    background-color:#282828;
+    height:430px;
+    border-radius:10px;
+    padding-top:5px;
+}
+.loginTitle, .signupTitle{
+    color:rgb(200,200,200);
+    text-align:center;
+    font-family: 'Quicksand', sans-serif;
+}
+#usernameLoginInput, #passwordLoginInput, #usernameSignupInput, #emailSignupInput, #passwordSignupInput, #password2SignupInput{
+    margin-left:40px;
+    margin-bottom:10px;
+    height:33px;
+    width:80%;
+    background-color:gray;
+    border:none;
+    border-radius:4px;
+    font-size:18px;
+    padding:10px;
+    font-family: 'Quicksand', sans-serif;
+}
+input:focus{
+    outline-color:maroon;
+    outline-style:solid;
+    outline-width:2px;
+}
+.loginButton, .signupButton{
+    font-family:'Bebas Neue', sans-serif;
+    font-size: 16px;
+    width:80%;
+    margin-left:40px;
+    margin-top:10px;
+    background-color:rgb(0, 60, 138);
+    padding:10px;
+    border:none;
+    border-radius:3px
+}
+.loginButton:hover, .signupButton:hover{
+    background-color: rgb(0, 80, 158);
+}
+
 
 /*Add icons of most recent activity done in red box*/
 .icon-item {
