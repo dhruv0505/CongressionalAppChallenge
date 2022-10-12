@@ -134,11 +134,16 @@ a{
     text-shadow: 1px 1px 25px black, 0 0 25px black, 0 0 25px black; 
     /* text-shadow: 2px 2px 4px black; */
 }
-
 .taskCompletionButton{
     padding:10px;
     font-size:30px;
     background-color: rgba(120,120,120,0.5);
+    font-family: 'Bebas Neue', sans-serif;
+}
+.taskCompletionButtonCompleted{
+    padding:10px;
+    font-size:30px;
+    background-color: #379683;
     font-family: 'Bebas Neue', sans-serif;
 }
 .taskCompletionButton:hover{

@@ -9,7 +9,8 @@ if ((typeof localStorage.getItem("userID") === "undefined" || (typeof localStora
 function openProfile(){
     window.location.href = "profilePage.html";
 }
-function openGroupPage(groupID){
+function openGroupPage(){
+    window.location.href = "groupPage.html";
 }
 function login(){
     localStorage.setItem("userID", document.getElementById("usernameLoginInput").value);
@@ -18,4 +19,11 @@ function login(){
 function logout(){
     localStorage.setItem("userID", "undefined");
     window.location.href = "login.html";
+}
+function markComplete(){
+    if (document.getElementById("taskCompletionButton").className=="taskCompletionButton centerContainer"){
+        document.getElementById("taskCompletionButton").className="taskCompletionButtonCompleted centerContainer";
+    } else{
+        document.getElementById("taskCompletionButton").className= "taskCompletionButton centerContainer";
+    }
 }
