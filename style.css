@@ -73,6 +73,14 @@ body {
     width: 100%;
 }
 
+.logoutButton:hover{
+    background-color: rgb(128, 80, 80);
+}
+.logoutButton{
+    padding: 15px;
+    border-radius: 20px;
+    color: black;
+}
 .centerContainer,
 .navOption,
 .group {
@@ -81,21 +89,19 @@ body {
     justify-content: center;
 }
 
-.navOption:hover {
+.navOption:hover{
     background-color: rgb(128, 80, 80);
 }
 
-a {
+a{
     padding: 15px;
     border-radius: 20px;
     color: black;
-    /* color:rgb(83, 83, 255); */
     text-decoration: none;
 }
 
 .material-symbols-rounded {
-    filter: invert(9%) sepia(56%) saturate(0%) hue-rotate(195deg) brightness(101%) contrast(85%);
-    z-index: 0;
+    color:#282828;
 }
 
 /* MAIN PAGES */

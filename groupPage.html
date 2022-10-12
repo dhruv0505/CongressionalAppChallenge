@@ -2,20 +2,20 @@
     <header>
         <title></title>
         <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
     <body>
         <!-- NAV BAR -->
         <div class="centerContainer">
-        <table class="nav centerContatiner">
-            <tr class="centerContainer">
-                <td><a href="home.html" class="navOption centerContainer"><img class="material-symbols-rounded" src="home.svg" style="width:30px;">&nbspHOME</a></td>
-                <td><a href="leaderboard.html"class="navOption centerContainer"><img class="material-symbols-rounded" src="leaderboard.svg" style="width:30px;">&nbspLEADERBOARD</a></td>
-                <td><a href="allGroups.html"class="navOption centerContainer"><img class="material-symbols-rounded" src="dashboard.svg" style="width:30px;">&nbspALL GROUPS</a></td>
-                <td><a href="challengePage.html"class="navOption centerContainer"><img class="material-symbols-rounded" src="rocket.svg" style="width:30px;">&nbspCHALLENGE PAGE</td>
-                <td style="padding-right:50px;"><a href="create.html" class="navOption centerContainer"><img class="material-symbols-rounded" src="add_circle.svg" style="width:30px;">&nbspLOG ACTIVITY</a></td>
-                <td><a class="navOption centerContainer"><img class="material-symbols-rounded" src="logout.svg" style="width:30px;">&nbspLOG OUT</a></td></tr>
-            </tr>
-        </table>
+            <table class="nav centerContatiner">
+                <tr class="centerContainer">
+                    <td><a href="home.html" class="navOption centerContainer"><span class="material-symbols-rounded" style="font-size:30px;padding-bottom:2px">home</span><div style="padding-top:2px;">&nbspHOME</div></a></td>
+                    <td><a href="allGroups.html"class="navOption centerContainer"><span class="material-symbols-rounded" style="font-size:30px;padding-bottom:1px">dashboard</span><div style="padding-top:2px;">&nbspALL GROUPS</div></a></td>
+                    <td style="padding-right:200px;"><a href="profilePage.html"class="navOption centerContainer"><span class="material-symbols-rounded" style="font-size:30px;padding-bottom:1px">person</span><div style="padding-top:2px;">&nbspPROFILE</div></a></td>
+                    <td><div class="logoutButton"><button class="centerContainer" style="background-color:rgba(0,0,0,0);border:none;font-family: 'Bebas Neue', sans-serif;font-size: 20px;"onclick="logout()"><span class="material-symbols-rounded" style="font-size:30px;">logout</span>&nbspLOG OUT</button></div></td></tr>
+                </tr>
+            </table>
         </div>
         <div class="centerContainer">
             <div class="groupPageDashboard" style="width:1200px;margin-top:75px;">
@@ -53,7 +53,7 @@
                         <div class="user-info">
                         <div class="user-name">Dhruv Lalchandi</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
                     </div>
                     <div class="leader">
                         <div class="user">
@@ -63,7 +63,7 @@
                         <div class="user-info">
                         <div class="user-name">Akshaj Chenreddy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
 
                     </div>
                     <div class="leader">
@@ -74,7 +74,7 @@
                         <div class="user-info">
                         <div class="user-name">Random Guy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
 
                     </div>
                     <div class="leader">
@@ -85,7 +85,7 @@
                         <div class="user-info">
                         <div class="user-name">Dhruv Lalchandi</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
                     </div>
                     <div class="leader">
                         <div class="user">
@@ -95,7 +95,7 @@
                         <div class="user-info">
                         <div class="user-name">Akshaj Chenreddy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
 
                     </div>
                     <div class="leader">
@@ -106,7 +106,7 @@
                         <div class="user-info">
                         <div class="user-name">Random Guy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
                     </div>                  
                     <div class="leader">
                         <div class="user">
@@ -116,7 +116,7 @@
                         <div class="user-info">
                         <div class="user-name">Dhruv Lalchandi</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
                     </div>
                     <div class="leader">
                         <div class="user">
@@ -126,7 +126,7 @@
                         <div class="user-info">
                         <div class="user-name">Akshaj Chenreddy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
 
                     </div>
                     <div class="leader">
@@ -137,7 +137,7 @@
                         <div class="user-info">
                         <div class="user-name">Random Guy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
 
                     </div>
                     <div class="leader">
@@ -148,7 +148,7 @@
                         <div class="user-info">
                         <div class="user-name">Random Guy</div>
                         </div>
-                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><img class="material-symbols-rounded" src="person_add.svg" style="width:50px;"></button>
+                        <button class="follow" style="right:5;background-color:rgb(165, 151, 151);border:none;"><span class="material-symbols-rounded" style="font-size:45px;">person_add</span></button>
                     </div>
                 </div>
                 </div>
