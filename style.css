@@ -63,6 +63,7 @@ body {
 }  
 .nav {
     top: 0;
+    left:0;
     background-color: maroon;
     position: fixed;
     color: #000000;
@@ -445,7 +446,7 @@ a{
     text-align:center;
     font-family: 'Quicksand', sans-serif;
 }
-#usernameLoginInput, #passwordLoginInput, #usernameSignupInput, #emailSignupInput, #passwordSignupInput, #password2SignupInput{
+#emailLoginInput, #passwordLoginInput, #usernameSignupInput, #emailSignupInput, #passwordSignupInput, #password2SignupInput{
     margin-left:40px;
     margin-bottom:10px;
     height:33px;

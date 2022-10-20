@@ -1,6 +1,75 @@
 <html>
     <header>
         <link rel="stylesheet" href="style.css">
+        <!-- <script defer src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js"></script> -->
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+            import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBnJyc59TYOtolpuh2y9k3JSQdEf8ARg5s",
+                authDomain: "the-planet-challenge-4649a.firebaseapp.com",
+                projectId: "the-planet-challenge-4649a",
+                storageBucket: "the-planet-challenge-4649a.appspot.com",
+                messagingSenderId: "110680044656",
+                appId: "1:110680044656:web:6cc9f484ba63fad70db0b5",
+                measurementId: "G-L5187QDXCJ"
+            };
+
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+
+
+            function passwordSignIn(email, password){
+                const auth = getAuth();
+                signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    localStorage.setItem("userID", user.uid);
+                    window.location.href = "home.html";
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
+            }
+            document.getElementById("loginButton").addEventListener("click", () => {passwordSignIn(document.getElementById("emailLoginInput").value, document.getElementById("passwordLoginInput").value)})
+
+            function passwordSignUp(username, email, password, password2){
+                if (password==password2){
+                    const auth = getAuth();
+                    createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in 
+                        const user = userCredential.user;
+                        localStorage.setItem("userID", user.uid);
+                        window.location.href = "home.html";
+                        // ...
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        // ..
+                    });
+                }
+            }
+            document.getElementById("signupButton").addEventListener("click", () => {passwordSignUp(document.getElementById("usernameSignupInput").value, document.getElementById("emailSignupInput").value, document.getElementById("passwordSignupInput").value, document.getElementById("password2SignupInput").value)})
+        
+            function googleSignIn(){
+                const provider = new GoogleAuthProvider();
+                const auth = getAuth();
+
+                signInWithRedirect(auth, provider)
+            }
+            document.getElementById("googleLoginButton").addEventListener("click", () => {googleSignIn()})
+        </script>
+        <!-- <script type="module" src="googleSignIn.js"></script>
+        <script type="module" src="passwordSignUp.js"></script>
+        <script type="module" src="passwordSignIn.js"></script> -->
         <script src="script.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
@@ -18,11 +87,12 @@
                 <br>
                 <div>
                     <div class="loginBox"><h1 class="loginTitle">Login</h1>
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username/Email</div>
-                        <input id="usernameLoginInput">
+                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Email</div>
+                        <input id="emailLoginInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password</div>
                         <input id="passwordLoginInput" type="password">
-                        <div><button class="loginButton" onclick="login()">Log In</button></div>
+                        <div><button class="loginButton" id="loginButton">Log In</button></div>
+                        <button id="googleLoginButton">Login with Google</button>
                     </div>
                     <br>
                     <div style="text-align:center;font-family:'Quicksand', cursive;font-size:30px;">OR</div>
@@ -31,12 +101,12 @@
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username</div>
                         <input id="usernameSignupInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Email</div>
-                        <input id="usernameSignupInput">
+                        <input id="emailSignupInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password</div>
                         <input id="passwordSignupInput" type="password">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password Retype</div>
                         <input id="password2SignupInput" type="password">
-                        <div><button class="signupButton">Sign Up</button></div>
+                        <div><button class="signupButton" id="signupButton">Sign Up</button></div>
                     </div>
                 </div>
             </div>

@@ -6,15 +6,15 @@ if ((typeof localStorage.getItem("userID") === "undefined" || (typeof localStora
     window.location.href = "login.html";
 }
 
+
+function googleLogin() {
+
+}
 function openProfile(){
     window.location.href = "profilePage.html";
 }
 function openGroupPage(){
     window.location.href = "groupPage.html";
-}
-function login(){
-    localStorage.setItem("userID", document.getElementById("usernameLoginInput").value);
-    window.location.href = "home.html";
 }
 function logout(){
     localStorage.setItem("userID", "undefined");
@@ -27,3 +27,4 @@ function markComplete(){
         document.getElementById("taskCompletionButton").className= "taskCompletionButton centerContainer";
     }
 }
+
