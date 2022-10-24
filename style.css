@@ -4,6 +4,13 @@
     font-style: normal;
     font-weight: 400;
     src: url(https://fonts.gstatic.com/s/bebasneue/v9/JTUSjIg69CK48gW7PXoo9Wdhyzbi.woff2) format('woff2');
+}
+/* FONTS */
+@font-face {
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/bebasneue/v9/JTUSjIg69CK48gW7PXoo9Wdhyzbi.woff2) format('woff2');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
@@ -59,22 +66,23 @@
 }
 /* ALL PAGES */
 body {
-    background-color: gray;
+    background-color: #379683;
 }  
 .nav {
     top: 0;
     left:0;
-    background-color: maroon;
+    background-color: #2C3531;
     position: fixed;
-    color: #000000;
+    color: c;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 20px;
-    filter: drop-shadow(0px 6px 3px #282828);
+    color: c;
+    filter: drop-shadow(0px 6px 3px );
     width: 100%;
 }
 
 .logoutButton:hover{
-    background-color: rgb(128, 80, 80);
+    background-color: rgb(122, 126.5, 124.5);
 }
 .logoutButton{
     padding: 15px;
@@ -92,7 +100,7 @@ body {
 }
 
 .navOption:hover{
-    background-color: rgb(128, 80, 80);
+    background-color: rgb(122, 126.5, 124.5);
 }
 
 a{
@@ -104,7 +112,7 @@ a{
 }
 
 .material-symbols-rounded {
-    color:#282828;
+    color:#D1E8E2;
 }
 
 /* MAIN PAGES */
@@ -193,7 +201,7 @@ a{
     height:200px;
     margin-bottom:15px;
     border-radius:3px;
-    background-color: rgb(200, 200, 200)
+    background-color: #116466(200, 200, 200)
 }
 .followingPFP{
     grid-row:2/span 3;
@@ -402,7 +410,7 @@ a{
     grid-column:1;
 }
 .groupChallenge{
-    background-color:maroon;
+    background-color:rgb(42, 3, 239);
     padding:5px;
     border-radius:3px;
     height:100px;
@@ -459,7 +467,7 @@ a{
     font-family: 'Quicksand', sans-serif;
 }
 input:focus{
-    outline-color:maroon;
+    outline-color:#379683;
     outline-style:solid;
     outline-width:2px;
 }
@@ -481,7 +489,7 @@ input:focus{
 
 /*Add icons of most recent activity done in red box*/
 .icon-item {
-    background: #800000;
+    background: #D9B08C;
     border-radius: 1rem;
     min-width: 60px;
     height: 50px;
@@ -490,4 +498,3 @@ input:focus{
 .icon-item:not(:first-child) {
     margin-left: 5px;
 }
-

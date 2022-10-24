@@ -54,7 +54,7 @@
             document.getElementById("loginButton").addEventListener("click", () => {passwordSignIn(document.getElementById("emailLoginInput").value, document.getElementById("passwordLoginInput").value)})
 
             function passwordSignUp(username, email, password, password2){
-                if (true){
+                if (password==password2){
                     const auth = getAuth();
                     createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
