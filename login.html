@@ -6,8 +6,8 @@
         <script type="module">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-            import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-            import {getDatabase, ref, get, set, child} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+            import {getDatabase, ref, get, set, child, push} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyBnJyc59TYOtolpuh2y9k3JSQdEf8ARg5s",
@@ -54,13 +54,15 @@
             document.getElementById("loginButton").addEventListener("click", () => {passwordSignIn(document.getElementById("emailLoginInput").value, document.getElementById("passwordLoginInput").value)})
 
             function passwordSignUp(username, email, password, password2){
-                if (password==password2){
+                if (true){
                     const auth = getAuth();
                     createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                         // Signed in 
+                        const db = getDatabase();
                         const user = userCredential.user;
-                        set(ref(db, 'users/' + user.uid), {
+                        const userId = user.uid; 
+                        set(ref(db, '/users/' + user.uid), {
                             username: username,
                             email: email,
                             profile_picture: "image.src",
@@ -69,6 +71,12 @@
                             last5: {},
                             groups: {},
                             badges: {}
+                        })
+                        .then(() => {
+                            // Data saved successfully!
+                        })
+                        .catch((error) => {
+                            // The write failed...
                         });
                         localStorage.setItem("userID", user.uid);
                         window.location.href = "home.html";
@@ -84,11 +92,25 @@
             document.getElementById("signupButton").addEventListener("click", () => {passwordSignUp(document.getElementById("usernameSignupInput").value, document.getElementById("emailSignupInput").value, document.getElementById("passwordSignupInput").value, document.getElementById("password2SignupInput").value)})
         
             function googleSignIn(){
+                const auth = getAuth()
                 const provider = new GoogleAuthProvider();
-                const auth = getAuth();
 
-                signInWithRedirect(auth, provider)
-            }
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                        const credential = GoogleAuthProvider.credentialFromResult(result)
+                        var token = result.credential.accessToken;
+                        var user = result.user;
+                            
+                        console.log(token)
+                        console.log(user)
+                    }).catch(function(error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                            
+                        console.log(error.code)
+                        console.log(error.message)
+                    });
+                }
             document.getElementById("googleLoginButton").addEventListener("click", () => {googleSignIn()})
         </script>
         <!-- <script type="module" src="googleSignIn.js"></script>
