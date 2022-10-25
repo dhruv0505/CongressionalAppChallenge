@@ -33,16 +33,6 @@
                     const dbRef = ref(db);
                     const user = auth.currentUser;
                     const userId = user.uid;
-                    get(child(dbRef, `users`)).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            console.log(snapshot.val());
-                        } else {
-                            console.log("No data available");
-                        }
-                    }).catch((error) => {
-                        console.error(error);
-                    });
-                    localStorage.setItem("userID", user.uid);
                     window.location.href = "home.html";
                     // ...
                 })
@@ -54,32 +44,35 @@
             document.getElementById("loginButton").addEventListener("click", () => {passwordSignIn(document.getElementById("emailLoginInput").value, document.getElementById("passwordLoginInput").value)})
 
             function passwordSignUp(username, email, password, password2){
-                if (password==password2){
+                if (password == password2){
                     const auth = getAuth();
                     createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                         // Signed in 
                         const db = getDatabase();
                         const user = userCredential.user;
-                        const userId = user.uid; 
-                        set(ref(db, '/users/' + user.uid), {
+                        const userId = user.uid;    
+                        return set(ref(db, '/users/' + user.uid), {
                             username: username,
                             email: email,
-                            profile_picture: "image.src",
+                            profile_picture: "default.src",
                             score: 0,
                             challenges: 0,
+                            groupNum: 0,
+                            pfp: false,
                             last5: {},
                             groups: {},
                             badges: {}
                         })
                         .then(() => {
-                            // Data saved successfully!
+                            localStorage.setItem("userID", user.uid);
+                            window.location.href = "home.html";
                         })
                         .catch((error) => {
-                            // The write failed...
+                            console.log("hello")
+                            console.error(error);
                         });
-                        localStorage.setItem("userID", user.uid);
-                        window.location.href = "home.html";
+                        
                         // ...
                     })
                     .catch((error) => {
@@ -113,10 +106,6 @@
                 }
             document.getElementById("googleLoginButton").addEventListener("click", () => {googleSignIn()})
         </script>
-        <!-- <script type="module" src="googleSignIn.js"></script>
-        <script type="module" src="passwordSignUp.js"></script>
-        <script type="module" src="passwordSignIn.js"></script> -->
-        <script src="script.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
     <body>
