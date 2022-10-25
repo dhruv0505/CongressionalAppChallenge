@@ -3,6 +3,13 @@
         <title></title>
         <link rel="stylesheet" href="style.css">
         <script type="module">
+            if ((typeof localStorage.getItem("userID") !== "undefined" && !(typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined")) && window.location.href.slice(-10)=="login.html"){
+                window.location.href = "home.html";
+            }
+
+            if ((typeof localStorage.getItem("userID") === "undefined" || (typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined"))&& window.location.href.slice(-10)!="login.html"){
+                window.location.href = "login.html";
+            }
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";

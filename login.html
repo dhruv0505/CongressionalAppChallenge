@@ -33,6 +33,7 @@
                     const dbRef = ref(db);
                     const user = auth.currentUser;
                     const userId = user.uid;
+                    localStorage.setItem("userID", user.uid);
                     window.location.href = "home.html";
                     // ...
                 })
@@ -60,7 +61,13 @@
                             challenges: 0,
                             groupNum: 0,
                             pfp: false,
-                            last5: {},
+                            last5: {
+                                number1: {"Not Completed Yet": ""},
+                                number2: {"Not Completed Yet": ""},
+                                number3: {"Not Completed Yet": ""},
+                                number4: {"Not Completed Yet": ""},
+                                number5: {"Not Completed Yet": ""}
+                            },
                             groups: {},
                             badges: {}
                         })

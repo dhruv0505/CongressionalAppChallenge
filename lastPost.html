@@ -6,6 +6,7 @@
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+            import {getDatabase, get, ref, child} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,22 +19,85 @@
             storageBucket: "the-planet-challenge-4649a.appspot.com",
             messagingSenderId: "110680044656",
             appId: "1:110680044656:web:6cc9f484ba63fad70db0b5",
-            measurementId: "G-L5187QDXCJ"
+            measurementId: "G-L5187QDXCJ",
+            databaseURL: "https://the-planet-challenge-4649a-default-rtdb.firebaseio.com/"
             };
 
             // Initialize Firebase
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
+            const db = getDatabase();
+            const dbRef = ref(db);
+            get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
+                if (snapshot.exists()) {                    
+                    document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val().number1)[0];
+                    document.getElementById("lastPostDate").innerHTML = snapshot.val().number1[Object.keys(snapshot.val().number1)[0]];
+                    window.currentPost = 1;
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+            function previousPost(){
+                console.log(window.currentPost);
+                if (window.currentPost == 1){
+                    window.currentPost = 5;
+                } else {
+                    window.currentPost = window.currentPost - 1;
+                }
+                console.log(window.currentPost);
+                const currentPost = "number" + window.currentPost;
+                const db = getDatabase();
+                const dbRef = ref(db);
+                get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        console.log(snapshot.val()[currentPost]);
+                        
+                        document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
+                        document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]];
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            };
+            function nextPost(){
+                console.log(window.currentPost);
+                if (window.currentPost == 5){
+                    window.currentPost = 1;
+                } else {
+                    window.currentPost = window.currentPost + 1;
+                }
+                console.log(window.currentPost);
+                const currentPost = "number" + window.currentPost;
+                const db = getDatabase();
+                const dbRef = ref(db);
+                get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        console.log(snapshot.val()[currentPost]);
+                        
+                        document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
+                        document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]];
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+            };
+            document.getElementById("previousPost").addEventListener("click", () => {previousPost()})
+            document.getElementById("nextPost").addEventListener("click", () => {nextPost()})
         </script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
-        </script>
     </header>
     <body style="background-color:maroon;position:relative;" class="centerContainer">
-        <button class="follow" style="left:5;background-color:maroon;border:none;"><span class="material-symbols-rounded" style="font-size:45px;">navigate_before</span></button>
+        <div id="previousPost" style="left:5;cursor:pointer"><span class="material-symbols-rounded" style="font-size:45px;">navigate_before</span></div>
         <div style="text-align:center;font-family: 'Shadows Into Light', cursive;">
-            <div class="centerContainer"><span style="font-size:30px;color:gray;"><strong>RAN A MILE</strong></span></div>
-            <div style="color:gray;font-size:20px;text-align:center;">May 5, 2008 - Running Challenge</div>
+            <div class="centerContainer"><span style="font-size:30px;color:gray;"><strong id="lastPostTitle"></strong></span></div>
+            <div id = "lastPostDate" style="color:gray;font-size:20px;text-align:center;"></div>
         </div>
-        <button class="follow" style="right:5;background-color:maroon;border:none;"><span class="material-symbols-rounded" style="font-size:45px;">navigate_next</span></button>
+        <div id="nextPost" style="right:5;cursor:pointer"><span class="material-symbols-rounded" style="font-size:45px;">navigate_next</span></div>
     </body>
 </html>
