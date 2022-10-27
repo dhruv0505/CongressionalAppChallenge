@@ -34,7 +34,8 @@
             // Initialize Firebase
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
-
+            // before page loads            
+            document.getElementById("allGroupsPage").setAttribute("style", "margin-top:95px;");
             function signOut2(){
                 const auth = getAuth();
                 signOut(auth).then(() => {
@@ -71,7 +72,7 @@
                 </tr>
             </table>
         </div>
-        <div class="centerContainer" style="margin-top:75px;">
+        <div class="centerContainer" id="allGroupsPage" style="margin-top:75px;display:none;">
             <div class="allGroupsDashboard" style="width:1200px">
                 <h1 style="padding-left:20px">MY GROUPS:</h1>
                 <table style="width:100%">

@@ -40,22 +40,23 @@
                 console.error(error);
             });
             function previousPost(){
-                console.log(window.currentPost);
                 if (window.currentPost == 1){
                     window.currentPost = 5;
                 } else {
                     window.currentPost = window.currentPost - 1;
                 }
-                console.log(window.currentPost);
                 const currentPost = "number" + window.currentPost;
                 const db = getDatabase();
                 const dbRef = ref(db);
                 get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
                     if (snapshot.exists()) {
-                        console.log(snapshot.val()[currentPost]);
-                        
-                        document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
-                        document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]];
+                        if (Object.keys(snapshot.val()[currentPost])[0]=="Not Completed Yet"){
+                            previousPost();
+                            
+                        } else {                        
+                            document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
+                            document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]];
+                        }
                     } else {
                         console.log("No data available");
                     }
@@ -64,22 +65,22 @@
                 });
             };
             function nextPost(){
-                console.log(window.currentPost);
                 if (window.currentPost == 5){
                     window.currentPost = 1;
                 } else {
                     window.currentPost = window.currentPost + 1;
                 }
-                console.log(window.currentPost);
                 const currentPost = "number" + window.currentPost;
                 const db = getDatabase();
                 const dbRef = ref(db);
                 get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
                     if (snapshot.exists()) {
-                        console.log(snapshot.val()[currentPost]);
-                        
-                        document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
-                        document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]];
+                        if (Object.keys(snapshot.val()[currentPost])[0]=="Not Completed Yet"){
+                            nextPost();
+                        } else {
+                            document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
+                            document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]]
+                        }
                     } else {
                         console.log("No data available");
                     }

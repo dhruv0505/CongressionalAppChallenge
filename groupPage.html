@@ -35,6 +35,7 @@
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
 
+            document.getElementById("groupPage").setAttribute("style", "margin-top:95px;");
             function signOut2(){
                 const auth = getAuth();
                 signOut(auth).then(() => {
@@ -71,8 +72,8 @@
                 </tr>
             </table>
         </div>
-        <div class="centerContainer">
-            <div class="groupPageDashboard" style="width:1200px;margin-top:75px;">
+        <div class="centerContainer" id="groupPage" style="margin-top:95px;display:none">
+            <div class="groupPageDashboard" style="width:1200px;">
                 <div class="titleGroupPage">Irvington High School</div>
                 <div class="groupChallengeCompletion">
                     <div style="font-family:'Quicksand', cursive; font-size:25px;margin-bottom:5px">Recent Challenge Completion:</div>

@@ -53,6 +53,7 @@
     src: url(https://fonts.gstatic.com/s/shadowsintolight/v15/UqyNK9UOIntux_czAvDQx_ZcHqZXBNQzdcD5.woff2) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 /* SCROLLBAR */
 ::-webkit-scrollbar {
     width: 17px;
@@ -186,12 +187,17 @@ a.tooltip2:hover span {
     /* text-shadow: 2px 2px 4px black; */
 }
 .taskCompletionButton{
+    cursor:pointer;
     padding:10px;
     font-size:30px;
+    border-style:solid;
+    border-width:2px;
+    border-color:black;
     background-color: rgba(120,120,120,0.5);
     font-family: 'Bebas Neue', sans-serif;
 }
 .taskCompletionButtonCompleted{
+    cursor:pointer;
     padding:10px;
     font-size:30px;
     background-color: #379683;
