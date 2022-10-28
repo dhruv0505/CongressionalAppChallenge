@@ -2,6 +2,7 @@
     <header>
         <title>EnviroGoals</title>
         <link rel="stylesheet" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
         <script type="module">
             if ((typeof localStorage.getItem("userID") !== "undefined" && !(typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined")) && window.location.href.slice(-10)=="login.html"){
                 window.location.href = "home.html";
@@ -9,6 +10,63 @@
 
             if ((typeof localStorage.getItem("userID") === "undefined" || (typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined"))&& window.location.href.slice(-10)!="login.html"){
                 window.location.href = "login.html";
+            }
+
+            function resetChallenge(){
+                let d = new Date();
+                let localTime = d.getTime();
+                let localOffset = d.getTimezoneOffset() * 60000;
+                let utc = localTime + localOffset;
+                let pstTime = utc+(3600000*-7);
+                let pst = new Date(pstTime);
+                return set(ref(db, `Challenge`), {
+                    Category: "Water",
+                    Date: pst.getDate(),
+                    Month: pst.getMonth(),
+                    Title: "5 Minute Shower or Less",
+                    Year: pst.getFullYear()
+                })
+            }
+
+            function getMonth(monthNum){
+                let month=""
+                if (monthNum==0){
+                    month="January";
+                }
+                if (monthNum==1){
+                    month="February";
+                }
+                if (monthNum==2){
+                    month="March";
+                }
+                if (monthNum==3){
+                    month="April";
+                }
+                if (monthNum==4){
+                    month="May";
+                }
+                if (monthNum==5){
+                    month="June";
+                }
+                if (monthNum==6){
+                    month="July";
+                }
+                if (monthNum==7){
+                    month="August";
+                }
+                if (monthNum==8){
+                    month="September";
+                }
+                if (monthNum==9){
+                    month="October";
+                }
+                if (monthNum==10){
+                    month="November";
+                }
+                if (monthNum==11){
+                    month="December";
+                }
+                return month;
             }
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
@@ -39,7 +97,27 @@
             
             get(child(dbRef, `Challenge`)).then((snapshot) => {
                 if (snapshot.exists()) {
+                    let d = new Date();
+                    let localTime = d.getTime();
+                    let localOffset = d.getTimezoneOffset() * 60000;
+                    let utc = localTime + localOffset;
+                    let pstTime = utc+(3600000*-7);
+                    let pst = new Date(pstTime);
                     document.getElementById("challengeTitle").innerHTML = snapshot.val().Title;
+                    if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
+                        resetChallenge();
+                    }
+                    get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot2) => {
+                        if (snapshot2.exists()) {
+                            if (snapshot2.val().number1[Object.keys(snapshot2.val().number1)[0]] == `${getMonth(pst.getMonth())} ${pst.getDate()}, ${pst.getFullYear()}`){
+                                document.getElementById("taskCompletionButton").className = "taskCompletionButtonCompleted centerContainer";
+                            }
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {
+                        console.error(error);
+                    });
                 } else {
                     console.log("No data available");
                 }
@@ -70,7 +148,7 @@
             }).catch((error) => {
                 console.error(error);
             });
-
+            
             function signOut2(){
                 const auth = getAuth();
                 signOut(auth).then(() => {
@@ -83,25 +161,77 @@
             document.getElementById("logout").addEventListener("click", () => {signOut2()})
 
             function completeTask(){
-                if (document.getElementById("taskCompletionButton").className=="taskCompletionButton centerContainer"){
+                if (document.getElementById("taskCompletionButton").className=="taskCompletionButton centerContainer"){ 
+                    const jsConfetti = new JSConfetti();
+                    jsConfetti.addConfetti({
+                        confettiNumber: 300,
+                        confettiColors: [
+                            "#89CFF0",
+                            "#0096FF",
+                            "#0047AB",
+                            "#6495ED",
+                            "#5D3FD3",
+                            "#191970",
+                        ],
+                    });
                     document.getElementById("taskCompletionButton").className="taskCompletionButtonCompleted centerContainer";
                     get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
                         if (snapshot.exists()) {
-                            let newNumber2={};
-                            if (Object.keys(snapshot.val().number1)[0]=="Complete Your First Challenge!"){
-                                newNumber2={"Not Completed Yet":""};
-                                console.log(newNumber2);
+                            get(child(dbRef, `Challenge`)).then((snapshot2) => {
+                                let newNumber2={};
+                                if (Object.keys(snapshot.val().number1)[0]=="Complete Your First Challenge!"){
+                                    newNumber2={"Not Completed Yet":""};
+                                }
+                                else{
+                                    newNumber2 = snapshot.val().number1
+                                }
+                                if (snapshot2.exists()) {
+                                    let newNumber1 = {};
+                                    let month = ""
+                                    newNumber1[snapshot2.val().Title] = `${getMonth(snapshot2.val()["Month"])} ${snapshot2.val()["Date"]}, ${snapshot2.val()["Year"]}`;
+                                    return set(ref(db, `users/${localStorage.getItem("userID")}/last5`), {
+                                        number1: newNumber1,
+                                        number2: newNumber2,
+                                        number3: snapshot.val().number2,
+                                        number4: snapshot.val().number3,
+                                        number5: snapshot.val().number4,
+                                        number6: snapshot.val().number5
+                                    })
+                    
+                                    .then(() => {
+                                        document.getElementById("lastPostIF").setAttribute("src", "lastPost.html");
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                    });
+                                } else {
+                                    console.log("No data available");
+                                }
+                            });
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {
+                        console.error(error);
+                    });
+                    
+                } else{
+                    document.getElementById("taskCompletionButton").className= "taskCompletionButton centerContainer";
+                    get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
+                        if (snapshot.exists()) {
+                            let newNumber1={};
+                            if (Object.keys(snapshot.val().number2)[0]=="Not Completed Yet"){
+                                newNumber1={"Complete Your First Challenge!":""};
                             }
                             else{
-                                newNumber2 = snapshot.val().number1
+                                newNumber1 = snapshot.val().number2;
                             }
                             return set(ref(db, '/users/' + localStorage.getItem("userID") + "/last5"), {
-                                number1: {"5 Minute Shower or Less": ""},
-                                number2: newNumber2,
-                                number3: snapshot.val().number2,
-                                number4: snapshot.val().number3,
-                                number5: snapshot.val().number4,
-                                number6: snapshot.val().number5
+                                number1: newNumber1,
+                                number2: snapshot.val().number3,
+                                number3: snapshot.val().number4,
+                                number4: snapshot.val().number5,
+                                number5: snapshot.val().number6
                             })
                             .then(() => {
                                 document.getElementById("lastPostIF").setAttribute("src", "lastPost.html");
@@ -115,9 +245,6 @@
                     }).catch((error) => {
                         console.error(error);
                     });
-                    
-                } else{
-                    document.getElementById("taskCompletionButton").className= "taskCompletionButton centerContainer";
                 }
             }
             document.getElementById("taskCompletionButton").addEventListener("click", () => {completeTask()})
