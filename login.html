@@ -29,8 +29,6 @@
                 signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     // Signed in 
-                    const db = getDatabase();
-                    const dbRef = ref(db);
                     const user = auth.currentUser;
                     const userId = user.uid;
                     localStorage.setItem("userID", user.uid);
@@ -38,14 +36,36 @@
                     // ...
                 })
                 .catch((error) => {
+                    document.getElementById("warningLogIn").setAttribute("style", "");
+                    document.getElementById("warningLogIn").innerHTML = "Invalid Email/Password";
                     const errorCode = error.code;
                     const errorMessage = error.message;
+
                 });
             }
             document.getElementById("loginButton").addEventListener("click", () => {passwordSignIn(document.getElementById("emailLoginInput").value, document.getElementById("passwordLoginInput").value)})
 
             function passwordSignUp(username, email, password, password2){
-                if (password == password2){
+                const db = getDatabase();
+                const dbRef = ref(db);
+                get(child(dbRef, `users`)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        let ids = Object.keys(snapshot.val());
+                        ids.forEach(function (id, index) {
+                            if (snapshot.val()[id].username==username){
+                                // warning
+                                document.getElementById("warningSignUp").setAttribute("style", "");
+                                document.getElementById("warningSignUp").innerHTML = "Username already exists";
+                                return;
+                            }
+                        });
+                    } else {
+                        console.log("No data available");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+                if (password == password2 && username.length>=5 && username.length<=20){
                     const auth = getAuth();
                     createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
@@ -70,24 +90,38 @@
                                 number6: {"Not Completed Yet": ""}
                             },
                             groups: {},
-                            badges: {}
+                            badges: {
+                                antiCarbonCruiser: 0,
+                                compostConqueror: 0,
+                                logins: 0,
+                                plasticPurger: 0,
+                                staticShower: 0,
+                                trasherBasher: 0
+                            }
                         })
                         .then(() => {
                             localStorage.setItem("userID", user.uid);
                             window.location.href = "home.html";
                         })
                         .catch((error) => {
-                            console.log("hello")
                             console.error(error);
                         });
                         
                         // ...
                     })
                     .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
+                        document.getElementById("warningSignUp").setAttribute("style", "");
+                        document.getElementById("warningSignUp").innerHTML = "Invalid Email/Password";
                         // ..
                     });
+                } else{
+                    if (password!=password2){
+                        document.getElementById("warningSignUp").setAttribute("style", "");
+                        document.getElementById("warningSignUp").innerHTML = "Passwords do not match";
+                    } else{
+                        document.getElementById("warningSignUp").setAttribute("style", "");
+                        document.getElementById("warningSignUp").innerHTML = "Username must be 5 - 20 Charachters";
+                    }
                 }
             }
             document.getElementById("signupButton").addEventListener("click", () => {passwordSignUp(document.getElementById("usernameSignupInput").value, document.getElementById("emailSignupInput").value, document.getElementById("passwordSignupInput").value, document.getElementById("password2SignupInput").value)})
@@ -130,6 +164,7 @@
                 <br>
                 <div>
                     <div class="loginBox"><h1 class="loginTitle">Login</h1>
+                        <div id="warningLogIn" style="display:none"></div>
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Email</div>
                         <input id="emailLoginInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password</div>
@@ -141,6 +176,7 @@
                     <div style="text-align:center;font-family:'Quicksand', cursive;font-size:30px;">OR</div>
                     <br>
                     <div class="signupBox"><h1 class="signupTitle">Sign Up</h1>
+                        <div id="warningSignUp" style="display:none"></div>
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username</div>
                         <input id="usernameSignupInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Email</div>

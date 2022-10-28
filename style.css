@@ -481,6 +481,14 @@ a.tooltip2:hover span {
 }
 
 /* LOGIN */
+#warningSignUp, #warningLogIn{
+    color:#d72324;
+    height:40px;
+    font-size:20px;
+    margin-bottom:5px;
+    margin-left:40px;
+    font-family: 'Bebas Neue', cursive;
+}
 .loginBox{
     width:400px;
     background-color:#282828;
