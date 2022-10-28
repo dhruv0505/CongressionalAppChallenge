@@ -112,6 +112,30 @@
                             if (snapshot2.val().number1[Object.keys(snapshot2.val().number1)[0]] == `${getMonth(pst.getMonth())} ${pst.getDate()}, ${pst.getFullYear()}`){
                                 document.getElementById("taskCompletionButton").className = "taskCompletionButtonCompleted centerContainer";
                             }
+                            get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot3) => {
+                                if (snapshot3.exists()) {
+                                    if (snapshot3.val().pfp) {
+                                        document.getElementById("pfpHome").setAttribute("src", `${localStorage.getItem("userID")}.png`);
+                                    } else {
+                                        document.getElementById("pfpHome").setAttribute("src", `default.png`);
+                                    }
+                                    // try{
+                                    //     document.getElementById("pfpHome").setAttribute("src", `${localStorage.getItem("userID")}.png`)
+                                    // }
+                                    // catch(error) {
+                                    //     document.getElementById("pfpHome").setAttribute("src", `default.png`);
+                                    // };
+                                    document.getElementById("usernameHome").innerHTML = snapshot3.val().username;
+                                    document.getElementById("scoreHome").innerHTML = `Score: ${snapshot3.val().score}`;
+                                    document.getElementById("groupsHome").innerHTML = `Groups: ${snapshot3.val().groupNum}`;
+                                    document.getElementById("homePage").setAttribute("style", "margin-top:95px;");
+
+                                } else {
+                                    console.log("No data available");
+                                }
+                            }).catch((error) => {
+                                console.error(error);
+                            });
                         } else {
                             console.log("No data available");
                         }
@@ -124,30 +148,7 @@
             }).catch((error) => {
                 console.error(error);
             });
-            get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    if (snapshot.val().pfp) {
-                        document.getElementById("pfpHome").setAttribute("src", `${localStorage.getItem("userID")}.png`);
-                    } else {
-                        document.getElementById("pfpHome").setAttribute("src", `default.png`);
-                    }
-                    // try{
-                    //     document.getElementById("pfpHome").setAttribute("src", `${localStorage.getItem("userID")}.png`)
-                    // }
-                    // catch(error) {
-                    //     document.getElementById("pfpHome").setAttribute("src", `default.png`);
-                    // };
-                    document.getElementById("usernameHome").innerHTML = snapshot.val().username;
-                    document.getElementById("scoreHome").innerHTML = `Score: ${snapshot.val().score}`;
-                    document.getElementById("groupsHome").innerHTML = `Groups: ${snapshot.val().groupNum}`;
-                    document.getElementById("homePage").setAttribute("style", "margin-top:95px;");
 
-                } else {
-                    console.log("No data available");
-                }
-            }).catch((error) => {
-                console.error(error);
-            });
             
             function signOut2(){
                 const auth = getAuth();
@@ -175,15 +176,16 @@
                         ],
                     });
                     document.getElementById("taskCompletionButton").className="taskCompletionButtonCompleted centerContainer";
-                    get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
+                    get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
                         if (snapshot.exists()) {
+                            const last5 = snapshot.val()["last5"];
                             get(child(dbRef, `Challenge`)).then((snapshot2) => {
                                 let newNumber2={};
-                                if (Object.keys(snapshot.val().number1)[0]=="Complete Your First Challenge!"){
+                                if (Object.keys(snapshot.val()["last5"].number1)[0]=="Complete Your First Challenge!"){
                                     newNumber2={"Not Completed Yet":""};
                                 }
                                 else{
-                                    newNumber2 = snapshot.val().number1
+                                    newNumber2 = snapshot.val()["last5"].number1
                                 }
                                 if (snapshot2.exists()) {
                                     let newNumber1 = {};
@@ -192,14 +194,26 @@
                                     return set(ref(db, `users/${localStorage.getItem("userID")}/last5`), {
                                         number1: newNumber1,
                                         number2: newNumber2,
-                                        number3: snapshot.val().number2,
-                                        number4: snapshot.val().number3,
-                                        number5: snapshot.val().number4,
-                                        number6: snapshot.val().number5
-                                    })
-                    
-                                    .then(() => {
-                                        document.getElementById("lastPostIF").setAttribute("src", "lastPost.html");
+                                        number3: snapshot.val()["last5"].number2,
+                                        number4: snapshot.val()["last5"].number3,
+                                        number5: snapshot.val()["last5"].number4,
+                                        number6: snapshot.val()["last5"].number5
+                                    }).then(() => {
+                                            document.getElementById("scoreHome").innerHTML = `Score: ${snapshot.val()["score"]+5}`
+                                            document.getElementById("lastPostIF").setAttribute("src", "lastPost.html")  
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/score`), snapshot.val()["score"]+5).then(() =>{
+                                                if (snapshot2.val()['Category']=="Water"){
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/badges/staticShower`), snapshot.val()["badges"]["staticShower"]+1);
+                                                } else if (snapshot2.val()['Category']=="Carbon"){
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/badges/antiCarbonCruiser`), snapshot.val()["badges"]["antiCarbonCruiser"]+1);
+                                                } else if (snapshot2.val()['Category']=="Compost"){
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/badges/compostConqueror`), snapshot.val()["badges"]["compostConqueror"]+1);
+                                                } else if (snapshot2.val()['Category']=="Trash"){
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/badges/trasherBasher`), snapshot.val()["badges"]["trasherBasher"]+1);
+                                                } else if (snapshot2.val()['Category']=="Plastic"){
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/badges/plasticPurger`), snapshot.val()["badges"]["plasticPurger"]+1);
+                                                } 
+                                            });
                                     })
                                     .catch((error) => {
                                         console.error(error);
@@ -217,24 +231,38 @@
                     
                 } else{
                     document.getElementById("taskCompletionButton").className= "taskCompletionButton centerContainer";
-                    get(child(dbRef, `users/${localStorage.getItem("userID")}/last5`)).then((snapshot) => {
+                    get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
                         if (snapshot.exists()) {
                             let newNumber1={};
-                            if (Object.keys(snapshot.val().number2)[0]=="Not Completed Yet"){
+                            if (Object.keys(snapshot.val()["last5"].number2)[0]=="Not Completed Yet"){
                                 newNumber1={"Complete Your First Challenge!":""};
                             }
                             else{
-                                newNumber1 = snapshot.val().number2;
+                                newNumber1 = snapshot.val()["last5"].number2;
                             }
                             return set(ref(db, '/users/' + localStorage.getItem("userID") + "/last5"), {
                                 number1: newNumber1,
-                                number2: snapshot.val().number3,
-                                number3: snapshot.val().number4,
-                                number4: snapshot.val().number5,
-                                number5: snapshot.val().number6
+                                number2: snapshot.val()["last5"].number3,
+                                number3: snapshot.val()["last5"].number4,
+                                number4: snapshot.val()["last5"].number5,
+                                number5: snapshot.val()["last5"].number6
                             })
                             .then(() => {
-                                document.getElementById("lastPostIF").setAttribute("src", "lastPost.html");
+                                document.getElementById("scoreHome").innerHTML = `Score: ${snapshot.val()["score"]-5}`
+                                document.getElementById("lastPostIF").setAttribute("src", "lastPost.html")  
+                                return set(ref(db, `users/${localStorage.getItem("userID")}/score`), snapshot.val()["score"]-5).then(() =>{
+                                    if (snapshot2.val()['Category']=="Water"){
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/staticShower`), snapshot.val()["badges"]["staticShower"]-1);
+                                    } else if (snapshot2.val()['Category']=="Carbon"){
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/antiCarbonCruiser`), snapshot.val()["badges"]["antiCarbonCruiser"]-1);
+                                    } else if (snapshot2.val()['Category']=="Compost"){
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/compostConqueror`), snapshot.val()["badges"]["compostConqueror"]-1);
+                                    } else if (snapshot2.val()['Category']=="Trash"){
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/trasherBasher`), snapshot.val()["badges"]["trasherBasher"]-1);
+                                    } else if (snapshot2.val()['Category']=="Plastic"){
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/plasticPurger`), snapshot.val()["badges"]["plasticPurger"]-1);
+                                    } 
+                                });
                             })
                             .catch((error) => {
                                 console.error(error);

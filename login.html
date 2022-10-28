@@ -30,7 +30,43 @@
                 .then((userCredential) => {
                     // Signed in 
                     const user = auth.currentUser;
-                    const userId = user.uid;
+                    const userId = user.uid;     
+                    let d = new Date();   
+                    let localTime = d.getTime();
+                    let localOffset = d.getTimezoneOffset() * 60000;
+                    let utc = localTime + localOffset;
+                    let pstTime = utc+(3600000*-7);
+                    let pst = new Date(pstTime);
+                    let yesterdayTime = utc+(3600000*-31);
+                    let yesterday = new Date(yesterdayTime);
+                    const db = getDatabase();
+                    const dbRef = ref(db);
+                    get(child(dbRef, `users/${auth.currentUser.uid}`)).then((snapshot) => {
+                        if (snapshot.exists()){
+                            if (snapshot.val()['tempLogin']['date'] == yesterday.getDate() && snapshot.val()['tempLogin']['month'] == yesterday.getMonth() && snapshot.val()['tempLogin']['year'] == yesterday.getFullYear()){
+                                return set(ref(db, `users/${auth.currentUser.uid}/tempLogin`), {
+                                    logins: snapshot.val()["tempLogin"]['logins']+1,
+                                    date: pst.getDate(),
+                                    month: pst.getMonth(),
+                                    year: pst.getFullYear()
+                                }).then(() =>{
+                                    if (snapshot.val()["tempLogin"]['logins']+1 > snapshot.val()["badges"]['logins']){
+                                        return set(ref(db, `users/${auth.currentUser.uid}/badges/logins`), snapshot.val()["tempLogin"]['logins']+1)
+                                    }
+                                });
+                            } else if (snapshot.val()['tempLogin']['date'] != pst.getDate() || snapshot.val()['tempLogin']['month'] != pst.getMonth() || snapshot.val()['tempLogin']['year'] != pst.getFullYear()){
+                                console.log("hello")
+                                return set(ref(db, `users/${auth.currentUser.uid}/tempLogin`), {
+                                    logins: 1,
+                                    date: pst.getDate(),
+                                    month: pst.getMonth(),
+                                    year: pst.getFullYear()
+                                });
+                            }
+                        } else {
+                            console.log("No data available");
+                        }
+                    });
                     localStorage.setItem("userID", user.uid);
                     window.location.href = "home.html";
                     // ...
@@ -40,6 +76,7 @@
                     document.getElementById("warningLogIn").innerHTML = "Invalid Email/Password";
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    console.error(error);
 
                 });
             }
@@ -72,7 +109,13 @@
                         // Signed in 
                         const db = getDatabase();
                         const user = userCredential.user;
-                        const userId = user.uid;    
+                        const userId = user.uid; 
+                        let d = new Date();   
+                        let localTime = d.getTime();
+                        let localOffset = d.getTimezoneOffset() * 60000;
+                        let utc = localTime + localOffset;
+                        let pstTime = utc+(3600000*-7);
+                        let pst = new Date(pstTime);
                         return set(ref(db, '/users/' + user.uid), {
                             username: username,
                             email: email,
@@ -89,11 +132,17 @@
                                 number5: {"Not Completed Yet": ""},
                                 number6: {"Not Completed Yet": ""}
                             },
+                            tempLogin: {
+                                date: pst.getDate(),
+                                month: pst.getMonth(),
+                                year: pst.getFullYear(),
+                                logins:1,
+                            },
                             groups: {},
                             badges: {
                                 antiCarbonCruiser: 0,
                                 compostConqueror: 0,
-                                logins: 0,
+                                logins: 1,
                                 plasticPurger: 0,
                                 staticShower: 0,
                                 trasherBasher: 0
