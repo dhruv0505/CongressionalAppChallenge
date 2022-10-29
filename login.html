@@ -221,7 +221,18 @@
                                 staticShower: 0,
                                 trasherBasher: 0
                             },
-                            groups: {}
+                            groups: {
+                                number1:"None",
+                                number2:"None",
+                                number3:"None",
+                                number4:"None",
+                                number5:"None",
+                                number6:"None",
+                                number7:"None",
+                                number8:"None",
+                                number9:"None",
+                                number10:"None"   
+                            }
                         })
                         .then(() => {
                             return set(ref(db, '/usernames/' + username), user.uid).then(() =>{

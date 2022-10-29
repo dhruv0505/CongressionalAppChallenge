@@ -418,6 +418,9 @@ a.tooltip2:hover span {
     height: 500px;
     border-radius: 5px;
 } */
+#createGroupAll:hover{
+    background-color: rgba(200, 200, 200, 0.5);
+}
 .group {
     background-color: rgb(145, 203, 244);
     margin: 15px;

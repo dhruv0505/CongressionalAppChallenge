@@ -104,6 +104,9 @@
                     if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
                         resetChallenge();
                     }
+                    get(child(dbRef, `users/${localStorage.getItem('userID')}/groups`)).then((snapshot) => {
+                        Object.keys(snapshot.val())
+                    })
                 } else {
                     console.log("No data available");
                 }
@@ -170,12 +173,12 @@
                             <tr style="padding-top: 0;">
                                 <td style="margin-top: 0;text-align: center;">
                                     <div style="font-size:35px;text-align: center;margin-top: 30px;"><b>CREATE</div>
-                                    <button style="margin-top: 10px;text-align: center;width: 120;height:80;border-radius: 72px;"><a href="createGroup.html"><img class="material-symbols-rounded" src="Images/add_circle.svg" style="width:72px;"></a></button>
+                                    <div class="centerContainer"><a href="createGroup.html" id="createGroupAll" style="width:50px;height:50px;border-radius:30%" class="centerContainer"><span class="material-symbols-rounded" style="font-size:80px;color:black;">add_circle</span></a></div>
                                 </td>
                             </tr>
                         </table>
                     </td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group1" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><div class="material-symbols-rounded" style="font-size:30px;">edit</div></a></div>
@@ -184,7 +187,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group2" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -193,7 +196,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td>  
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group3" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -206,7 +209,7 @@
                     
                 </tr>
                 <tr>
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group4" style = "height:10px;display:none"div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -215,7 +218,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group5" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -224,7 +227,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group6" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -233,7 +236,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group7" style = "height:10px;display:none" style = "height:10px"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -244,7 +247,7 @@
                     </div></td>  
                 </tr>
                 <tr>
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group8" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -253,7 +256,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group9" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
@@ -262,7 +265,7 @@
                             <div style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;">4000 Members</div>
                         </div>
                     </div></td> 
-                    <td style = "height:10px"><div class="group">
+                    <td id = "group10" style = "height:10px;display:none"><div class="group">
                         <div class="textGroup" style="text-align:center;">
                             <div style="float:left ;vertical-align: middle;font-family: '', serif;color:rgb(0, 0, 0);font-size:45px; border-radius: 5px;">Irvington</div>
                             <div style="float: right;"><a href="editGroup.html"><img src="Images/pencil3.png" class="pfp" style="margin-left: 8px;display:block;width:20px;height:20px;"></a></div>
