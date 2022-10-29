@@ -213,7 +213,6 @@
                                 year: pst.getFullYear(),
                                 logins:1,
                             },
-                            groups: {},
                             badges: {
                                 antiCarbonCruiser: 0,
                                 compostConqueror: 0,
@@ -221,7 +220,8 @@
                                 plasticPurger: 0,
                                 staticShower: 0,
                                 trasherBasher: 0
-                            }
+                            },
+                            groups: {}
                         })
                         .then(() => {
                             return set(ref(db, '/usernames/' + username), user.uid).then(() =>{

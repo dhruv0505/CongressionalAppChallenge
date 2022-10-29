@@ -128,7 +128,7 @@
                             document.getElementById("scoreHome").innerHTML = `Score: ${snapshot2.val().score}`;
                             document.getElementById("groupsHome").innerHTML = `Groups: ${snapshot2.val().groupNum}`;
                             if (profileOpenId==localStorage.getItem("userID")){
-                                document.getElementById("settings").setAttribute("style", "")
+                                document.getElementById("settings1").setAttribute("style", "")
                             } 
                             document.getElementById("profilePage").setAttribute("style", "margin-top:95px;");
                         } else {
@@ -372,7 +372,9 @@
                     </table> -->
                     
                 </div>
-                <div id ="settings" style="display:none">
+                <div id ="settings1" style="display:none">
+                    <div id ="settings">
+
                     <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-top: 20;padding: 5px; text-align:center;font-weight:semi-bold;margin-top: 90px;">UPDATE YOUR PROFILE</div>
 
                     <div id="settingsWarnings" style="display:none"></div>
@@ -422,10 +424,10 @@
                             </tr> 
                             
                         </table>
-                        
+                        </div>
+                        <div style ="width:1200px;height:120px" class = "centerContainer"><div id="updateProfile" style="text-align:center;padding:10px;cursor:pointer;border: 3px solid rgb(7, 182, 182);background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;width:300px;font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">UPDATE</div></div>     
                     </div>    
-                </div>
-                <div style ="width:1200px;height:120px" class = "centerContainer"><div id="updateProfile" style="text-align:center;padding:10px;cursor:pointer;border: 3px solid rgb(7, 182, 182);background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;width:300px;font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">UPDATE</div></div> 
+                    </div>
                 </div>
             </div>
         </div>

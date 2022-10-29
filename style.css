@@ -408,7 +408,7 @@ a.tooltip2:hover span {
     background-color: #28282850
 }
 
-.group {
+/* .group {
     background-color: rgb(200, 200, 200);
     margin: 15px;
     width: 360px;
@@ -417,8 +417,8 @@ a.tooltip2:hover span {
     border-style: solid;
     height: 500px;
     border-radius: 5px;
-}
-/* .group {
+} */
+.group {
     background-color: rgb(145, 203, 244);
     margin: 15px;
     width: 240px;
@@ -427,7 +427,7 @@ a.tooltip2:hover span {
     border-style: solid;
     height: 330px;
     border-radius: 20px;
-} */
+}
 
 .textGroup>img {
     border-radius: 30px;
