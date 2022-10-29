@@ -14,7 +14,7 @@
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
             import {getAuth, signOut, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-            import {getDatabase} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import {getDatabase, get, ref, child, set} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,6 +35,9 @@
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
 
+
+            const db = getDatabase(app);
+            const dbRef = ref(db);
             document.getElementById("groupPage").setAttribute("style", "margin-top:95px;");
             function signOut2(){
                 const auth = getAuth();

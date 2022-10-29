@@ -1,0 +1,233 @@
+<html>
+    <header>
+        <title></title>
+        <link rel="stylesheet" href="style.css">
+        <script type="module">
+            if ((typeof localStorage.getItem("userID") !== "undefined" && !(typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined")) && window.location.href.slice(-10)=="login.html"){
+                window.location.href = "home.html";
+            }
+
+            if ((typeof localStorage.getItem("userID") === "undefined" || (typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined"))&& window.location.href.slice(-10)!="login.html"){
+                window.location.href = "login.html";
+            }
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+            import {getAuth, signOut, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+            import {getDatabase, get, ref, child, set} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+            apiKey: "AIzaSyBnJyc59TYOtolpuh2y9k3JSQdEf8ARg5s",
+            authDomain: "the-planet-challenge-4649a.firebaseapp.com",
+            projectId: "the-planet-challenge-4649a",
+            storageBucket: "the-planet-challenge-4649a.appspot.com",
+            messagingSenderId: "110680044656",
+            appId: "1:110680044656:web:6cc9f484ba63fad70db0b5",
+            measurementId: "G-L5187QDXCJ",
+            databaseURL: "https://the-planet-challenge-4649a-default-rtdb.firebaseio.com/"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            function resetChallenge(){
+                let d = new Date();
+                let localTime = d.getTime();
+                let localOffset = d.getTimezoneOffset() * 60000;
+                let utc = localTime + localOffset;
+                let pstTime = utc+(3600000*-7);
+                let pst = new Date(pstTime);
+                return set(ref(db, `Challenge`), {
+                    Category: "Water",
+                    Date: pst.getDate(),
+                    Month: pst.getMonth(),
+                    Title: "5 Minute Shower or Less",
+                    Year: pst.getFullYear()
+                })
+            }
+
+
+            const db = getDatabase(app);
+            const dbRef = ref(db);
+            get(child(dbRef, `Challenge`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    let d = new Date();
+                    let localTime = d.getTime();
+                    let localOffset = d.getTimezoneOffset() * 60000;
+                    let utc = localTime + localOffset;
+                    let pstTime = utc+(3600000*-7);
+                    let pst = new Date(pstTime);
+                    document.getElementById("challengeTitle").innerHTML = snapshot.val().Title;
+                    if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
+                        resetChallenge();
+                    }
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+            document.getElementById("createGroupPage").setAttribute("style", "");
+            function signOut2(){
+                const auth = getAuth();
+                signOut(auth).then(() => {
+                    localStorage.setItem("userID", "undefined")
+                    window.location.href="login.html";
+                }).catch((error) => {
+                // An error happened.
+                });
+            }
+            document.getElementById("logout").addEventListener("click", () => {signOut2()})
+
+            const database = getDatabase(app)
+        </script>
+        <script src="script.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+    </header>
+    <body>
+        
+        
+
+        <!-- NAV BAR -->
+        <div class="nav centerContainer">
+            <table style="width:1200px;height:75px;">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td style="width:30px"><a href="home.html" class="navOption centerContainer tooltip"><div class="material-symbols-rounded" style="font-size:30px;">home</div><span>Home</span></a></td>
+                                <td style="width:30px;"><a href="allGroups.html" class="navOption centerContainer tooltip"><div class="material-symbols-rounded" style="font-size:30px;">dashboard</div><span>All Groups</span></a></td>
+                                <td style="width:30px;"><a href="badges.html" class="navOption centerContainer tooltip"><div class="material-symbols-rounded" style="font-size:30px;">stars</div><span>Badges</span></a></td>
+                                <td style="width:30px;"><a href="profilePage.html" class="navOption centerContainer tooltip"><div class="material-symbols-rounded" style="font-size:30px;">person</div><span>Profile</span></a></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - BADGES</td>
+                    <td><div style="width:258px;display:flex;justify-content:flex-end;"><a class="navOption centerContainer tooltip2" id="logout"><div class="material-symbols-rounded" style="font-size:30px;">logout</div><span>Log Out</span></a></div></td>
+                </tr>
+            </table>
+        </div>
+
+        <div id = "createGroupPage" style = "display:none;">
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 90px;">NEW GROUP</div>
+
+
+            <span class="stuff centerContainer" style="float:left;margin-top: 10px;">
+                <table style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;margin-left: 20px;">
+                    
+                    <tr >
+                        <td>                        
+                            <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Group Name</b></span>
+                        </td>
+                        <td>
+                            <input type ="text" maxlength="50" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td>                        
+                            <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Description</b></span>
+                        </td>
+                        <td>
+                            <textarea required maxlength="200" placeholder="Description" rows="6" cols = "40" style = "resize: none;font-family: Courier, monospace;font-size: 21px;margin-left:30px;border-color: black; border-radius:2px;border:2px solid;margin-right: 6px;padding: 10px;"></textarea>
+                        </td>
+                    </tr> 
+                    
+                    <tr>
+                        <td >                        
+                            <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Logo</b></span>
+                        </td>
+                        <td>
+                            <input type ="file" accept = "image/png" style = "margin-left:30px;" >
+                        </td>
+                    </tr> 
+                    
+                </table>
+                
+            </span>
+
+
+            
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 312px;">SETTINGS</div>
+
+
+            <span class="stuff centerContainer" style="float:left;margin-top: 10px;">
+                <table style="border-collapse: collapse;height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;padding: 5px;">
+                    
+                    <tr>
+                        
+                        <td style="border-bottom: 2px dotted;border-collapse: separate;">
+                            <input name = "1" type = "radio" value="hello" style = "vertical-align: middle;margin-left: 15px;"/>
+                            <label style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>Public</b></label>
+                            <input name = "1" type = "radio" style = "vertical-align: middle;margin-left: 15px;">
+                            <label style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>Private</b></label>
+                        </td>
+                        <td style="border-bottom: 2px dotted;border-collapse: collapse;">                        
+                            <span style="vertical-align: middle;margin-top: 40px;margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 20px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Public groups can be seen and joined by anyone.</b></span>
+                        </td>
+                    </tr> 
+                    <tr>
+                    <form>
+                        
+                        <td style="border-top: 2px dotted;border-collapse: collapse;">
+                            <label style="margin-left: 15;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>1</b></label>
+                            <input name  = "amountRange" value = "5000" type = "range" min="1" max="5000" style = "vertical-align: middle;margin-left: 1px;" oninput="this.form.amountInput.value=this.value"/>
+                            <label style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>5000</b></label>                        
+                        </td>
+                        <td style="border-top: 2px dotted;border-collapse: collapse;">                        
+                            <span style="width:300px;vertical-align: middle;margin-top: 40px;margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 20px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Member Limit</b></span>
+                            <input name = "amountInput" oninput="this.form.amountRange.value=this.value" type = "number" min = 1 max=5000 style="width:84px;vertical-align: middle;font-family:  monospace, serif;color:rgb(0, 0, 0);font-size:24px; padding: 5px; border-radius: 5px;height: 30;">
+                        </td>
+                    </form>
+                    </tr> 
+                
+                    
+                    
+                </table>
+            </span>
+
+            
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 145px;">CREATE</div>
+
+
+            <span class="stuff centerContainer" style="float:left;margin-top: 10px;">
+                <table style="background-color: rgb(232, 61, 110);border:3.5px solid black;margin-left: 20px;">
+                    
+                    <tr >
+                        <td class = "centerContainer">                        
+                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px; padding: 5px; border-radius: 5px;"><b>Code</b></span>
+                            <div id = "grpcode" style="width: 100px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:20px;margin-left: 10px; padding: 5px; border-radius: 5px;letter-spacing: 5px;">00100</div>
+                            <div><button id="btn"  onclick="copytxt('grpcode')" style="margin-bottom: 5px;margin-left: -15;margin-top: 5px;background-color: rgb(238, 101, 140);border-radius: 5px;border:rgb(238,101,140);margin-right: 5px;padding: 8px;"><b id="copybtn" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:21px;">Copy</b></button></div>                  
+                            
+                            <script>
+                                function copytxt(id) {
+                                    var copyText = document.getElementById(id).innerHTML;
+                                    
+                                    navigator.clipboard.writeText(copyText);
+
+                                    document.getElementById("copybtn").innerHTML = "Copied";
+                                    document.getElementById("btn").style.backgroundColor = "rgb(24, 240, 117)";
+                                                        
+                                    alert("Copied Code: " + copyText);
+                                }
+                            </script>
+                        </td>
+                        
+                    </tr> 
+            
+                    
+                </table>
+            </span>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div><button  style="margin-top: 30px;border: 3px solid rgb(7, 182, 182);margin-left: 5px;background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;"><label style="font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">CREATE</label></button></div>                   
+        </div>
+
+    </body>
+</html>

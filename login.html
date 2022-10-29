@@ -7,7 +7,7 @@
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
             import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-            import {getDatabase, ref, get, set, child, push} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import {getDatabase, get, ref, child, set} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyBnJyc59TYOtolpuh2y9k3JSQdEf8ARg5s",
@@ -23,7 +23,43 @@
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
 
+            function resetChallenge(){
+                let d = new Date();
+                let localTime = d.getTime();
+                let localOffset = d.getTimezoneOffset() * 60000;
+                let utc = localTime + localOffset;
+                let pstTime = utc+(3600000*-7);
+                let pst = new Date(pstTime);
+                return set(ref(db, `Challenge`), {
+                    Category: "Water",
+                    Date: pst.getDate(),
+                    Month: pst.getMonth(),
+                    Title: "5 Minute Shower or Less",
+                    Year: pst.getFullYear()
+                })
+            }
 
+
+            const db = getDatabase(app);
+            const dbRef = ref(db);
+            get(child(dbRef, `Challenge`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    let d = new Date();
+                    let localTime = d.getTime();
+                    let localOffset = d.getTimezoneOffset() * 60000;
+                    let utc = localTime + localOffset;
+                    let pstTime = utc+(3600000*-7);
+                    let pst = new Date(pstTime);
+                    document.getElementById("challengeTitle").innerHTML = snapshot.val().Title;
+                    if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
+                        resetChallenge();
+                    }
+                } else {
+                    console.log("No data available");
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
             function passwordSignIn(email, password){
                 const auth = getAuth();
                 signInWithEmailAndPassword(auth, email, password)
