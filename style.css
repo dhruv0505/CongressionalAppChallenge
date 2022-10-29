@@ -408,7 +408,7 @@ a.tooltip2:hover span {
     background-color: #28282850
 }
 
-/* .group {
+.group {
     background-color: rgb(200, 200, 200);
     margin: 15px;
     width: 360px;
@@ -417,8 +417,8 @@ a.tooltip2:hover span {
     border-style: solid;
     height: 500px;
     border-radius: 5px;
-} */
-.group {
+}
+/* .group {
     background-color: rgb(145, 203, 244);
     margin: 15px;
     width: 240px;
@@ -427,7 +427,7 @@ a.tooltip2:hover span {
     border-style: solid;
     height: 330px;
     border-radius: 20px;
-}
+} */
 
 .textGroup>img {
     border-radius: 30px;
@@ -549,8 +549,48 @@ input:focus{
 .loginButton:hover, .signupButton:hover{
     background-color: rgb(0, 80, 158);
 }
+/* PROFILE PAGE */
 
+#myInput{
+    width:500px;
+    height:50px;
+    font-size:40px;
+    padding:5px;
+    font-family: "Quicksand", sans-serif;
+}
+.dropdown {
+    display: inline-block;
+}
 
+.dropdown-content {
+    position: absolute;
+    background-color: #f6f6f6;
+    min-width: 230px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+.dropdown-content div {
+    border:none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 465px;
+}
+
+.dropdown-content div:hover {background-color: #ddd;}
+.settings{
+    height:300px;
+}
+#settingsWarnings{
+    color:#d72324;
+    font-family:'Bebas Neue', cursive;
+    text-align:center;
+    font-size:20px;
+
+}
 /*Add icons of most recent activity done in red box*/
 .icon-item {
     background: #D9B08C;

@@ -48,6 +48,46 @@
                     Title: "5 Minute Shower or Less",
                     Year: pst.getFullYear()
                 })
+            }            
+            function getMonth(monthNum){
+                let month=""
+                if (monthNum==0){
+                    month="January";
+                }
+                if (monthNum==1){
+                    month="February";
+                }
+                if (monthNum==2){
+                    month="March";
+                }
+                if (monthNum==3){
+                    month="April";
+                }
+                if (monthNum==4){
+                    month="May";
+                }
+                if (monthNum==5){
+                    month="June";
+                }
+                if (monthNum==6){
+                    month="July";
+                }
+                if (monthNum==7){
+                    month="August";
+                }
+                if (monthNum==8){
+                    month="September";
+                }
+                if (monthNum==9){
+                    month="October";
+                }
+                if (monthNum==10){
+                    month="November";
+                }
+                if (monthNum==11){
+                    month="December";
+                }
+                return month;
             }
 
 
@@ -61,7 +101,6 @@
                     let utc = localTime + localOffset;
                     let pstTime = utc+(3600000*-7);
                     let pst = new Date(pstTime);
-                    document.getElementById("challengeTitle").innerHTML = snapshot.val().Title;
                     if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
                         resetChallenge();
                     }

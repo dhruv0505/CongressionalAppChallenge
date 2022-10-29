@@ -13,8 +13,8 @@
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-            import {getAuth, signOut, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-            import {getDatabase, get, ref, child, set} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import {getAuth, signOut,signInWithEmailAndPassword, GoogleAuthProvider, updatePassword, updateEmail} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+            import {getDatabase, get, ref, child, set, remove} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -53,7 +53,46 @@
                     Year: pst.getFullYear()
                 })
             }
-
+            function getMonth(monthNum){
+                let month=""
+                if (monthNum==0){
+                    month="January";
+                }
+                if (monthNum==1){
+                    month="February";
+                }
+                if (monthNum==2){
+                    month="March";
+                }
+                if (monthNum==3){
+                    month="April";
+                }
+                if (monthNum==4){
+                    month="May";
+                }
+                if (monthNum==5){
+                    month="June";
+                }
+                if (monthNum==6){
+                    month="July";
+                }
+                if (monthNum==7){
+                    month="August";
+                }
+                if (monthNum==8){
+                    month="September";
+                }
+                if (monthNum==9){
+                    month="October";
+                }
+                if (monthNum==10){
+                    month="November";
+                }
+                if (monthNum==11){
+                    month="December";
+                }
+                return month;
+            }
             get(child(dbRef, `Challenge`)).then((snapshot) => {
                 if (snapshot.exists()) {
                     let d = new Date();
@@ -62,17 +101,48 @@
                     let utc = localTime + localOffset;
                     let pstTime = utc+(3600000*-7);
                     let pst = new Date(pstTime);
-                    document.getElementById("challengeTitle").innerHTML = snapshot.val().Title;
                     if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
                         resetChallenge();
                     }
+                    let profileOpenId = ''
+                    if (typeof localStorage.getItem("openProfile") === "object"){
+                        profileOpenId = localStorage.getItem("userID")
+                    } else {
+                        profileOpenId = localStorage.getItem("openProfile")
+                    }
+                    get(child(dbRef, `users/${profileOpenId}`)).then((snapshot2) => {
+                        if (snapshot2.exists()) {
+                            localStorage.setItem("openProfile", localStorage.getItem("userID"))
+                            if (snapshot2.val().pfp) {
+                                document.getElementById("pfpHome").setAttribute("src", `${profileOpenId}.png`);
+                            } else {
+                                document.getElementById("pfpHome").setAttribute("src", `default.png`);
+                            }
+                            // try{
+                            //     document.getElementById("pfpHome").setAttribute("src", `${localStorage.getItem("userID")}.png`)
+                            // }
+                            // catch(error) {
+                            //     document.getElementById("pfpHome").setAttribute("src", `default.png`);
+                            // };
+                            document.getElementById("usernameHome").innerHTML = snapshot2.val().username;
+                            document.getElementById("scoreHome").innerHTML = `Score: ${snapshot2.val().score}`;
+                            document.getElementById("groupsHome").innerHTML = `Groups: ${snapshot2.val().groupNum}`;
+                            if (profileOpenId==localStorage.getItem("userID")){
+                                document.getElementById("settings").setAttribute("style", "")
+                            } 
+                            document.getElementById("profilePage").setAttribute("style", "margin-top:95px;");
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {
+                        console.error(error);
+                    });
                 } else {
                     console.log("No data available");
                 }
             }).catch((error) => {
                 console.error(error);
             });
-            document.getElementById("profilePage").setAttribute("style", "width:1200px")
             function signOut2(){
                 const auth = getAuth();
                 signOut(auth).then(() => {
@@ -84,9 +154,81 @@
             }
             document.getElementById("logout").addEventListener("click", () => {signOut2()})
 
-            const database = getDatabase(app)
+            function openProfile(id){
+                localStorage.setItem("openProfile", id)
+                window.location.href = "profilePage.html";
+            }
+            function findUser() {
+                var input, filter, ul, li, a, i;
+                input = document.getElementById("myInput");
+                document.getElementById("myDropdown").setAttribute("style", "display:none;");
+                document.getElementById("myDropdown").innerHTML="";
+                if (input.value.length>=5){
+                    let filter = input.value.toUpperCase();
+                    get(child(dbRef, 'usernames')).then((snapshot) =>{
+                        let a = Object.keys(snapshot.val());
+                        for (i = 0; i < a.length; i++) {
+                            let txtValue = a[i];
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                document.getElementById("myDropdown").innerHTML = document.getElementById("myDropdown").innerHTML + `<div id="${txtValue}">${txtValue}</div>`;
+                                document.getElementById(txtValue).addEventListener("click", () => {openProfile(snapshot.val()[txtValue])})
+                                document.getElementById("myDropdown").setAttribute("style", "");
+                            }
+                        }
+                    });
+                }
+            }
+            document.getElementById("myInput").addEventListener("keyup", () => {findUser()})
+
+            function updateUser(id, username, password, newPassword, newEmail){
+                if (username.length>=5 && username.length<=20){
+                    const auth = getAuth();
+                    get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) =>{
+                        let email=snapshot.val()['email'];
+                        let oldUsername=snapshot.val()['username'];
+                        signInWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            // Signed in 
+                            const user = auth.currentUser;
+                            const userId = user.uid;  
+                            updatePassword(user, newPassword).then(() =>{
+                                updateEmail(user, newEmail).then(() =>{
+                                    return set(ref(db, `users/${localStorage.getItem("userID")}/username`), username).then(() => {
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/pfp`), true).then(() =>{
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/email`), newEmail).then(() =>{
+                                                return remove(ref(db, `usernames/${oldUsername}`)).then(() => {
+                                                    return set(ref(db, `usernames/${username}`), id).then(() =>{
+                                                        window.location.href = "profilePage.html";
+                                                    })
+                                                })
+                                            })
+
+                                        })
+                                    })
+                                })
+                            })
+                            .catch((error) => {
+                            });
+
+                        })
+                        .catch((error) => {
+                            // document.getElementById("warningLogIn").setAttribute("style", "");
+                            // document.getElementById("warningLogIn").innerHTML = "Incorrect Password";
+                            const errorCode = error.code;
+                            const errorMessage = error.message;
+                            console.error(error);
+
+                        });
+                    })
+
+                } else{
+                    document.getElementById("settingsWarnings").setAttribute("style", "");
+                    document.getElementById("settingsWarnings").innerHTML = "Username must be 5 - 20 Charachters"
+                }
+
+            }
+            document.getElementById("updateProfile").addEventListener("click", () => {updateUser(localStorage.getItem("userID"), document.getElementById("usernameSettings").value, document.getElementById("passwordSettings").value, document.getElementById("newPasswordSettings").value, document.getElementById("newEmailSettings").value)});
         </script>
-        <script src="script.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
     <body>
@@ -109,109 +251,183 @@
                 </tr>
             </table>
         </div>
-        <div id="profilePage" style="display:none;width:1200px;" class="centerContainer">
-            <div>
-            <span class="profile">
-                    
-                <div class="accountHolder" style="float: left; border-radius:7px;grid-column:3;grid-row:1;margin-top:100px;margin-bottom: 10px; background-color:rgb(200,200,200);width:700px;margin-right:30px;">
-                    <div class="account centerContainer" style="border-radius:7px;height:700px;background-color: rgb(128, 4, 4);border: 6px solid black;padding-bottom: 15;padding-top: 7;">
-                        
-                        <table style="margin-bottom: 10px;margin-left: 30px;">
-                            <tr>
-                                
-                            </tr>
-                            <tr><td class="centerContainer">
-                                <img src="Images/static.png" class="pfp" style="width:300px;height:300px;border:8px solid black; border-radius:300px;background-color: black;margin-top: 20px;margin-left: 70px;">
-                                
-                                <a href="settings.html"><img src="Images/setimg.png" class="pfp" style="display:block;width:50px;height:50px; border-radius:30px;margin-left: 80px;margin-bottom: 300px;"></a>
-                            </td> 
-                            </tr>
-                            
-                            <tr><td>
-                                <div style="width: 630px; height: 80px;background-color: black;border-radius: 670px;margin-bottom: 10px;"> 
-                                    <div style="font-family: 'Quicksand', sans-serif;color:rgb(198, 218, 49);font-size:62px;text-align:center;width:100%;"><b>Dhruv Lalchandani</b></div>
-                                </div></td></tr>
-                            <tr class="accountInfo"><td class="centerContainer">
-                                <div style="width: 500px;background-color: rgb(56, 7, 121);border-radius: 12px;"> 
-                                    <div style="box-sizing: border-box;font-family: 'Monaco', serif;color:rgb(198, 218, 49);font-size:55px;text-align:center;width:100%;border: 3px solid rgb(46, 2, 42);border-radius: 12px;">Points: 0</div>
-                                </div></td></tr>
-                            <tr class="accountInfo"><td class="centerContainer">
-                                <div style="width: 500px; background-color: rgb(56, 7, 121);border-radius: 12px;"> 
-                                    <div style="box-sizing: border-box;font-family: 'Monaco', serif;color:rgb(198, 218, 49);font-size:55px;text-align:center;width:100%;border: 3px solid rgb(46, 2, 42);border-radius: 12px;">Challenges: 0</div>
-                                </div></td></tr>
-                            <tr class="accountInfo"><td class="centerContainer">
-                                <div style="width: 500px; background-color: rgb(56, 7, 121);border-radius: 12px;"> 
-                                    <div style="box-sizing: border-box;font-family: 'Monaco', serif;color:rgb(198, 218, 49);font-size:55px;text-align:center;width:100%;border: 3px solid rgb(46, 2, 42);border-radius: 12px;">Groups: 0</div>
-                                </div></td></tr>
-
-                        </table>
+        <div id="profilePage" style="display:none;" class="centerContainer">
+                <div style="width:1200px;">
+                <div class ="centerContainer">
+                    <div class="accountHolder" style="border-radius:5px;background-color:rgb(200,200,200);width:413px;height:275px;margin-right:20px;">
+                        <div class="account centerContainer" style="border-bottom-left-radius:5px;border-bottom-right-radius:5px;height:180px;">
+                            <table style="margin-bottom: 75px;">
+                                <tr><td class="centerContainer"><img id="pfpHome" class="pfp" style="width:120px;height:120px;border-radius:120px;"></td></tr>
+                                <tr><td><div id="usernameHome" style="font-family: 'Quicksand', sans-serif;color:rgb(200,200,200);font-size:30px;text-align:center;width:100%"></div></td></tr>
+                                <tr class="accountInfo"><td class="centerContainer" id="scoreHome"></td><td class="centerContainer" id="groupsHome"></td></tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </span>
-            <span class="stuff centerContainer" style="float: right; margin-top: 105px;padding-right: 10px;">
-                <table style = "background-color: rgb(200, 9, 9);padding: 5px;padding-top: 15px;padding-bottom: 15px;border: 6px solid black;border-radius: 7px;padding-left: 25px;padding-right: 15px;">
-                    <tr>
-                        <td><input type="search" placeholder = "Username" style = "height:48px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;"></td>
-                        <td><button type="submit" style = "border: 2px solid;border-radius: 5px;height:40px;width:100px;border-color: black;">Search</button></td>
-                    </tr>
-                    <tr>
-                        <td style = "padding-top: 10px;">
-                            <div style="float:left;height: 12px; width: 12px; border-radius:12px; background-color: greenyellow;margin-top: 7px;margin-left: 250;"></div>
-                            <div style="font-family: 'Arial', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 267px;"><b>Results: 0</b></div>
-                        </td>
-                    </tr>
-                    <tr class="centerContainer">
-                        <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
-                            <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
-                            <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
-                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+                <!-- <span class="profile">
+                        
+                    <div class="accountHolder" style="float: left; border-radius:7px;grid-column:3;grid-row:1;margin-top:100px;margin-bottom: 10px; background-color:rgb(200,200,200);width:700px;margin-right:30px;">
+                        <div class="account centerContainer" style="border-radius:7px;height:700px;background-color: rgb(128, 4, 4);border: 6px solid black;padding-bottom: 15;padding-top: 7;">
+                            
+                            <table style="margin-bottom: 10px;margin-left: 30px;">
+                                <tr>
+                                    
+                                </tr>
+                                <tr><td class="centerContainer">
+                                    <img src="Images/static.png" class="pfp" style="width:300px;height:300px;border:8px solid black; border-radius:300px;background-color: black;margin-top: 20px;margin-left: 70px;">
+                                    
+                                    <a href="settings.html"><img src="Images/setimg.png" class="pfp" style="display:block;width:50px;height:50px; border-radius:30px;margin-left: 80px;margin-bottom: 300px;"></a>
+                                </td> 
+                                </tr>
+                                
+                                <tr><td>
+                                    <div style="width: 630px; height: 80px;background-color: black;border-radius: 670px;margin-bottom: 10px;"> 
+                                        <div style="font-family: 'Quicksand', sans-serif;color:rgb(198, 218, 49);font-size:62px;text-align:center;width:100%;"><b>Dhruv Lalchandani</b></div>
+                                    </div></td></tr>
+                                <tr class="accountInfo"><td class="centerContainer">
+                                    <div style="width: 500px;background-color: rgb(56, 7, 121);border-radius: 12px;"> 
+                                        <div style="box-sizing: border-box;font-family: 'Monaco', serif;color:rgb(198, 218, 49);font-size:55px;text-align:center;width:100%;border: 3px solid rgb(46, 2, 42);border-radius: 12px;">Points: 0</div>
+                                    </div></td></tr>
+                                <tr class="accountInfo"><td class="centerContainer">
+                                    <div style="width: 500px; background-color: rgb(56, 7, 121);border-radius: 12px;"> 
+                                        <div style="box-sizing: border-box;font-family: 'Monaco', serif;color:rgb(198, 218, 49);font-size:55px;text-align:center;width:100%;border: 3px solid rgb(46, 2, 42);border-radius: 12px;">Challenges: 0</div>
+                                    </div></td></tr>
+                                <tr class="accountInfo"><td class="centerContainer">
+                                    <div style="width: 500px; background-color: rgb(56, 7, 121);border-radius: 12px;"> 
+                                        <div style="box-sizing: border-box;font-family: 'Monaco', serif;color:rgb(198, 218, 49);font-size:55px;text-align:center;width:100%;border: 3px solid rgb(46, 2, 42);border-radius: 12px;">Groups: 0</div>
+                                    </div></td></tr>
 
-                        </button></td>
-                    </tr> 
-                    <tr class="centerContainer">
-                        <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
-                            <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
-                            <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
-                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+                            </table>
+                        </div>
+                    </div>
+                </span> -->
+                    <div style="display:flex;justify-content:center;align-items:flex-start;width:500px;height:300px;">
+                        <div class="dropdown">
+                            <div style="font-size:50px;font-family:'Bebas Neue', sans-serif;">Search for another user!</div>
+                            <input type="text" autocomplete="off" placeholder="Search..." id="myInput">
+                            <div id="myDropdown" class="dropdown-content" style="display:none">
+                            </div>
+                        </div>
+                    </div>
+                <!-- <span class="stuff centerContainer" style="float: right; margin-top: 105px;padding-right: 10px;"> -->
+                    <!-- <table style = "background-color: rgb(200, 9, 9);padding: 5px;padding-top: 15px;padding-bottom: 15px;border: 6px solid black;border-radius: 7px;padding-left: 25px;padding-right: 15px;">
+                        <tr>
+                            <td><input type="search" placeholder = "Username" style = "height:48px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;"></td>
+                            <td><button type="submit" style = "border: 2px solid;border-radius: 5px;height:40px;width:100px;border-color: black;">Search</button></td>
+                        </tr>
+                        <tr>
+                            <td style = "padding-top: 10px;">
+                                <div style="float:left;height: 12px; width: 12px; border-radius:12px; background-color: greenyellow;margin-top: 7px;margin-left: 250;"></div>
+                                <div style="font-family: 'Arial', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 267px;"><b>Results: 0</b></div>
+                            </td>
+                        </tr>
+                        <tr class="centerContainer">
+                            <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
+                                <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
+                                <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
+                                <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
 
-                        </button></td>
-                    </tr>
-                    <tr class="centerContainer">
-                        <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
-                            <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
-                            <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
-                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+                            </button></td>
+                        </tr> 
+                        <tr class="centerContainer">
+                            <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
+                                <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
+                                <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
+                                <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
 
-                        </button></td>
-                    </tr>
-                    <tr class="centerContainer">
-                        <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
-                            <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
-                            <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
-                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+                            </button></td>
+                        </tr>
+                        <tr class="centerContainer">
+                            <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
+                                <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
+                                <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
+                                <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
 
-                        </button></td>
-                    </tr>
-                    <tr class="centerContainer">
-                        <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
-                            <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
-                            <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
-                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+                            </button></td>
+                        </tr>
+                        <tr class="centerContainer">
+                            <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
+                                <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
+                                <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
+                                <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
 
-                        </button></td>
-                    </tr>
-                    <tr class="centerContainer">
-                        <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
-                            <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
-                            <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
-                            <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+                            </button></td>
+                        </tr>
+                        <tr class="centerContainer">
+                            <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
+                                <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
+                                <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
+                                <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
 
-                        </button></td>
-                    </tr>
+                            </button></td>
+                        </tr>
+                        <tr class="centerContainer">
+                            <td style = "padding-top: 10px;"><button name = "searchres" style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;">
+                                <img src="Images/static.png" class="followingPFP" style = "vertical-align: middle;height: 60;width: 60;">
+                                <span class = "" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;padding-right:30;padding-left: 5;"><b>Akshaj Chenreddy </b></span>
+                                <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:25px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186)"><b>Mutual: 0</b></span>
+
+                            </button></td>
+                        </tr>
+                        
+                    </table> -->
                     
-                </table>
-                
-            </span></div>
+                </div>
+                <div id ="settings" style="display:none">
+                    <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-top: 20;padding: 5px; text-align:center;font-weight:semi-bold;margin-top: 90px;">UPDATE YOUR PROFILE</div>
+
+                    <div id="settingsWarnings" style="display:none"></div>
+                    <div class="stuff centerContainer" style="float:left;margin-top: 10px;width:100%">
+                        <table class="centerContainer" style="height: 200px;background-color: rgb(200,200,200);padding:10px;margin-left:6px;width:100%;border-radius:10px;">
+                            
+                            <tr style="margin-bottom:10px;">
+                                <td>                        
+                                    <span style="font-family: 'Quicksand', serif;font-size:24px;margin-left: 5px;padding:5px;"><b>New Username</b></span>
+                                </td>
+                                <td>
+                                    <input id="usernameSettings" type ="text" placeholder="New Username" style = "font-family: Courier, monospace;font-size: 21px;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                                </td>
+                            </tr>
+                            <tr style="margin-top:10px;">
+                                <td>                        
+                                    <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>New Email</b></span>
+                                </td>
+                                <td>
+                                    <input id="newEmailSettings" type ="text"  placeholder="New Email" style = "font-family: Courier, monospace;font-size: 21px;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                                </td>
+                            </tr>  
+                            <tr style="margin-bottom:10px;">
+                                <td>                        
+                                    <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Previous Password</b></span>
+                                </td>
+                                <td>
+                                    <input id="passwordSettings" type ="password" placeholder="Current Password" style = "font-family: Courier, monospace;font-size: 21px;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                                </td>
+                            </tr> 
+                            <tr style="margin-bottom:10px;">
+                                <td>                        
+                                    <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>New Password</b></span>
+                                </td>
+                                <td>
+                                    <input id="newPasswordSettings" type ="password"  placeholder="New Password" style = "font-family: Courier, monospace;font-size: 21px;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                                </td>
+                            </tr> 
+                            
+                            <tr style="margin-bottom:10px;">
+                                <td>                        
+                                    <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Profile Picture</b></span>
+                                </td>
+                                <td>
+                                    <input type ="file" accept="image/png" style = "margin-left:30px;" >
+                                </td>
+                            </tr> 
+                            
+                        </table>
+                        
+                    </div>    
+                </div>
+                <div style ="width:1200px;height:120px" class = "centerContainer"><div id="updateProfile" style="text-align:center;padding:10px;cursor:pointer;border: 3px solid rgb(7, 182, 182);background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;width:300px;font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">UPDATE</div></div> 
+                </div>
+            </div>
         </div>
     </body>
 </html>

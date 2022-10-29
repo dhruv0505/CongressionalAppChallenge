@@ -250,18 +250,21 @@
                             .then(() => {
                                 document.getElementById("scoreHome").innerHTML = `Score: ${snapshot.val()["score"]-5}`
                                 document.getElementById("lastPostIF").setAttribute("src", "lastPost.html")  
-                                return set(ref(db, `users/${localStorage.getItem("userID")}/score`), snapshot.val()["score"]-5).then(() =>{
-                                    if (snapshot2.val()['Category']=="Water"){
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/staticShower`), snapshot.val()["badges"]["staticShower"]-1);
-                                    } else if (snapshot2.val()['Category']=="Carbon"){
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/antiCarbonCruiser`), snapshot.val()["badges"]["antiCarbonCruiser"]-1);
-                                    } else if (snapshot2.val()['Category']=="Compost"){
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/compostConqueror`), snapshot.val()["badges"]["compostConqueror"]-1);
-                                    } else if (snapshot2.val()['Category']=="Trash"){
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/trasherBasher`), snapshot.val()["badges"]["trasherBasher"]-1);
-                                    } else if (snapshot2.val()['Category']=="Plastic"){
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/badges/plasticPurger`), snapshot.val()["badges"]["plasticPurger"]-1);
-                                    } 
+                                get(child(dbRef, `Challenge`)).then((snapshot2) => {
+                                    return set(ref(db, `users/${localStorage.getItem("userID")}/score`), snapshot.val()["score"]-5).then(() =>{
+                                        if (snapshot2.val()['Category']=="Water"){
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/badges/staticShower`), snapshot.val()["badges"]["staticShower"]-1);
+                                        } else if (snapshot2.val()['Category']=="Carbon"){
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/badges/antiCarbonCruiser`), snapshot.val()["badges"]["antiCarbonCruiser"]-1);
+                                        } else if (snapshot2.val()['Category']=="Compost"){
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/badges/compostConqueror`), snapshot.val()["badges"]["compostConqueror"]-1);
+                                        } else if (snapshot2.val()['Category']=="Trash"){
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/badges/trasherBasher`), snapshot.val()["badges"]["trasherBasher"]-1);
+                                        } else if (snapshot2.val()['Category']=="Plastic"){
+                                            console.log("hi");
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/badges/plasticPurger`), snapshot.val()["badges"]["plasticPurger"]-1);
+                                        } 
+                                    });
                                 });
                             })
                             .catch((error) => {
