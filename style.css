@@ -403,6 +403,17 @@ a.tooltip2:hover span {
     border: none;
     font-family: 'Quicksand', sans-serif;
 }
+.editGroup {
+    background-color:rgba(200, 200, 200, 0.3);
+    color:black;
+    padding:5px;
+    border-radius: 10px;
+    padding-top:8px;
+    padding-bottom:8px;
+}
+.editGroup:hover {
+    background-color:rgba(200, 200, 200, 0.5)
+}
 
 .createGroup:hover {
     background-color: #28282850

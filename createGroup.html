@@ -14,7 +14,7 @@
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
             import {getAuth, signOut, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-            import {getDatabase, get, ref, child, set} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import {getDatabase, get, ref, child, set, push} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -121,7 +121,84 @@
             }
             document.getElementById("logout").addEventListener("click", () => {signOut2()})
 
-            const database = getDatabase(app)
+            function createNewGroup(groupName, groupDesc, limit){
+                console.log(groupDesc, limit, groupName)
+                if (groupDesc.length<=300){
+                        if (groupName.length>=5 && groupName.length<=20){
+                            const groupsRef = ref(db, 'groups');
+                            const newGroupRef = push(groupsRef);
+                            let members = {};
+                            let d = new Date();
+                            let localTime = d.getTime();
+                            let localOffset = d.getTimezoneOffset() * 60000;
+                            let utc = localTime + localOffset;
+                            let pstTime = utc+(3600000*-7);
+                            let pst = new Date(pstTime);
+                            let challengeCompleted=0;
+                            get(child(dbRef, `Challenge`)).then((challenge) => {
+                                get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) =>{
+                                    if (snapshot.val()['last5']['number1'][Object.keys(snapshot.val()['last5']['number1'])[0]]==`${pst.getDate()} ${getMonth(pst.getMonth())}, ${pst.getFullYear()}`){
+                                        challengeCompleted=1;
+                                        }
+                                    members[localStorage.getItem("userID")]=snapshot.val()['username'];
+                                    return set(newGroupRef, {
+                                        Owner: localStorage.getItem("userID"),
+                                        description: groupDesc,
+                                        memberLimit: limit,
+                                        memberList: members,
+                                        name: groupName,
+                                        pfp:false,
+                                        last5:{
+                                            lastDate:{
+                                                Date: pst.getDate(),
+                                                Month: getMonth(pst.getDate()),
+                                                Year: pst.getFullYear()
+                                            }, 
+                                            number1: {
+                                                Title: challenge.val()['Title'],
+                                                Completed: challengeCompleted
+                                            }, 
+                                            number2: {
+                                                Title: "None",
+                                                Completed: 0
+                                            }, 
+                                            number3: {
+                                                Title: "None",
+                                                Completed: 0
+                                            }, 
+                                            number4: {
+                                                Title: "None",
+                                                Completed: 0
+                                            }, 
+                                            number5: {
+                                                Title: "None",
+                                                Completed: 0
+                                            }
+                                        }
+                                    }).then(() =>{
+                                        for (var i = 1; i < 11; i++){
+                                            if (snapshot.val()["groups"][`number${i}`]=="None"){
+                                                return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), newGroupRef.key)
+                                            }
+
+                                        }
+                                        localStorage.setItem("openGroup", newGroupRef.key);
+                                        window.location.href="groupPage.html"
+
+                                    })
+                                })
+
+                            })
+                    } else {
+                        console.log("fai1")
+                        // Warn group name must be 5-20 charachters
+                    }
+                } else {
+                    console.log("fai2l")
+                    // Warn description exceeds 300 Charachter limit
+                }
+            }
+            document.getElementById("createGroup").addEventListener("click", () => {createNewGroup(document.getElementById("groupNameFeild").value, document.getElementById("groupDescFeild").value, document.getElementById("memberLimitCreate").value)})
         </script>
         <script src="script.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
@@ -154,7 +231,7 @@
             <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 90px;">NEW GROUP</div>
 
 
-            <span class="stuff centerContainer" style="float:left;margin-top: 10px;">
+            <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
                 <table style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;margin-left: 20px;">
                     
                     <tr >
@@ -162,7 +239,7 @@
                             <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Group Name</b></span>
                         </td>
                         <td>
-                            <input type ="text" maxlength="50" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                            <input id="groupNameFeild" type ="text" maxlength="20" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
                         </td>
                     </tr> 
                     <tr>
@@ -170,7 +247,7 @@
                             <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Description</b></span>
                         </td>
                         <td>
-                            <textarea required maxlength="200" placeholder="Description" rows="6" cols = "40" style = "resize: none;font-family: Courier, monospace;font-size: 21px;margin-left:30px;border-color: black; border-radius:2px;border:2px solid;margin-right: 6px;padding: 10px;"></textarea>
+                            <textarea  id="groupDescFeild" maxlength="300" placeholder="Description" rows="6" cols = "40" style = "resize: none;font-family: Courier, monospace;font-size: 21px;margin-left:30px;border-radius:2px;border:2px solid;padding: 10px;"></textarea>
                         </td>
                     </tr> 
                     
@@ -185,17 +262,17 @@
                     
                 </table>
                 
-            </span>
+            </div>
 
 
             
             <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 312px;">SETTINGS</div>
 
 
-            <span class="stuff centerContainer" style="float:left;margin-top: 10px;">
+            <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
                 <table style="border-collapse: collapse;height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;padding: 5px;">
                     
-                    <tr>
+                    <!-- <tr>
                         
                         <td style="border-bottom: 2px dotted;border-collapse: separate;">
                             <input name = "1" type = "radio" value="hello" style = "vertical-align: middle;margin-left: 15px;"/>
@@ -207,7 +284,7 @@
                             <span style="vertical-align: middle;margin-top: 40px;margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 20px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Public groups can be seen and joined by anyone.</b></span>
                         </td>
                     </tr> 
-                    <tr>
+                    <tr> -->
                     <form>
                         
                         <td style="border-top: 2px dotted;border-collapse: collapse;">
@@ -217,7 +294,7 @@
                         </td>
                         <td style="border-top: 2px dotted;border-collapse: collapse;">                        
                             <span style="width:300px;vertical-align: middle;margin-top: 40px;margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 20px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Member Limit</b></span>
-                            <input name = "amountInput" oninput="this.form.amountRange.value=this.value" type = "number" min = 1 max=5000 style="width:84px;vertical-align: middle;font-family:  monospace, serif;color:rgb(0, 0, 0);font-size:24px; padding: 5px; border-radius: 5px;height: 30;">
+                            <input name = "amountInput" oninput="this.form.amountRange.value=this.value" id="memberLimitCreate" type = "number" min = 1 max=5000 style="width:84px;vertical-align: middle;font-family:  monospace, serif;color:rgb(0, 0, 0);font-size:24px; padding: 5px; border-radius: 5px;height: 30;">
                         </td>
                     </form>
                     </tr> 
@@ -225,16 +302,15 @@
                     
                     
                 </table>
-            </span>
+            </div>
 
-            
-            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 145px;">CREATE</div>
+            <!-- <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 145px;">CREATE</div> -->
 
 
-            <span class="stuff centerContainer" style="float:left;margin-top: 10px;">
+            <!-- <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
                 <table style="background-color: rgb(232, 61, 110);border:3.5px solid black;margin-left: 20px;">
-                    
-                    <tr >
+                     -->
+                    <!-- <tr >
                         <td class = "centerContainer">                        
                             <span style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px; padding: 5px; border-radius: 5px;"><b>Code</b></span>
                             <div id = "grpcode" style="width: 100px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:20px;margin-left: 10px; padding: 5px; border-radius: 5px;letter-spacing: 5px;">00100</div>
@@ -254,18 +330,17 @@
                             </script>
                         </td>
                         
-                    </tr> 
+                    </tr>  -->
             
                     
                 </table>
-            </span>
+            </div>
             <br>
             <br>
             <br>
             <br>
             <br>
-            <div><button  style="margin-top: 30px;border: 3px solid rgb(7, 182, 182);margin-left: 5px;background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;"><label style="font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">CREATE</label></button></div>                   
+            <div id="createGroup" style="width:115px;margin-top: 30px;border: 3px solid rgb(7, 182, 182);margin-left: 5px;background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;"><label style="font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">CREATE</label></div>       
         </div>
-
     </body>
 </html>
