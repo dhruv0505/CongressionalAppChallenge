@@ -603,6 +603,14 @@ input:focus{
     font-size:20px;
 
 }
+
+/* EDIT GROUP */
+.warning{
+    color:#a00000;
+    padding:5px;
+    font-size:35px;
+    font-family: 'Bebas Neue', sans-serif;
+}
 /*Add icons of most recent activity done in red box*/
 .icon-item {
     background: #D9B08C;

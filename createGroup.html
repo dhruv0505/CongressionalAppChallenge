@@ -126,7 +126,7 @@
             function createNewGroup(groupName, groupDesc, limit){
                 console.log(groupDesc, limit, groupName)
                 if (groupDesc.length<=300){
-                        if (groupName.length>=5 && groupName.length<=20){
+                        if (groupName.length>=5 && groupName.length<=10){
                             const groupsRef = ref(db, 'groups');
                             const newGroupRef = push(groupsRef);
                             let members = {};
@@ -185,7 +185,8 @@
                             })
                     } else {
                         console.log("fai1")
-                        // Warn group name must be 5-20 charachters
+                        document.getElementById("createWarnings").innerHTML="Group Name Must be 5 - 10 Charachters"
+                        document.getElementById("createWarnings").setAttribute("style", "")
                     }
                 } else {
                     console.log("fai2l")
@@ -233,7 +234,7 @@
                             <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Group Name</b></span>
                         </td>
                         <td>
-                            <input id="groupNameFeild" type ="text" maxlength="20" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                            <input id="groupNameFeild" type ="text" maxlength="10" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
                         </td>
                     </tr> 
                     <tr>
@@ -264,6 +265,7 @@
 
 
             <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
+                <div class="warning" id="editWarnings" style="display:none"></div>
                 <table style="border-collapse: collapse;height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;padding: 5px;">
                     
                     <!-- <tr>

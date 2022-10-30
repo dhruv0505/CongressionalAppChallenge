@@ -118,7 +118,7 @@
                         document.getElementById("min").innerHTML=Object.keys(group.val()['memberList']).length;
                         document.getElementById("sliderEdit").setAttribute("min", Object.keys(group.val()['memberList']).length)
                         document.getElementById("memberLimitEdit").setAttribute("min", Object.keys(group.val()['memberList']).length)
-                        document.getElementById("editGroupPage").setAttribute("style", "");
+                        document.getElementById("editGroupPage").setAttribute("style", "margin-top:95px;");
                     } else {
                         console.log("No data available");
                     }
@@ -141,7 +141,7 @@
             function editNewGroup(groupName, groupDesc, limit){
                 console.log(groupDesc, limit, groupName)
                 if (groupDesc.length<=300){
-                    if (groupName.length>=5 && groupName.length<=20){
+                    if (groupName.length>=5 && groupName.length<10){
                         get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) =>{
                             return set(ref(db, `groups/${localStorage.getItem("editGroup")}/description`),  groupDesc).then(() =>{
                                 return set(ref(db, `groups/${localStorage.getItem("editGroup")}/name`),  groupName).then(() =>{
@@ -154,7 +154,8 @@
                         })
 
                     } else {
-                        console.log("fai1")
+                        document.getElementById("editWarnings").innerHTML="Group Name Must be 5 - 10 Charachters"
+                        document.getElementById("editWarnings").setAttribute("style", "")
                         // Warn group name must be 5-20 charachters
                     }
                 } else {
@@ -191,7 +192,8 @@
         </div>
 
         <div id = "editGroupPage" style = "display:none;">
-            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 90px;">GROUP INFO</div>
+            <div class="warning" id="editWarnings" style="display:none"></div>
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);">GROUP INFO</div>
 
 
             <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
@@ -202,7 +204,7 @@
                             <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Group Name</b></span>
                         </td>
                         <td>
-                            <input id="groupNameFeild" type ="text" maxlength="20" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                            <input id="groupNameFeild" type ="text" maxlength="10" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
                         </td>
                     </tr> 
                     <tr>

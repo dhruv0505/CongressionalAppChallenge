@@ -129,6 +129,8 @@
                             document.getElementById("groupsHome").innerHTML = `Groups: ${snapshot2.val().groupNum}`;
                             if (profileOpenId==localStorage.getItem("userID")){
                                 document.getElementById("settings1").setAttribute("style", "")
+                                document.getElementById("usernameSettings").value=snapshot2.val()['username']
+                                document.getElementById("newEmailSettings").value=snapshot2.val()['email']
                             } 
                             document.getElementById("profilePage").setAttribute("style", "margin-top:95px;");
                         } else {
@@ -183,43 +185,70 @@
             function updateUser(id, username, password, newPassword, newEmail){
                 if (username.length>=5 && username.length<=20){
                     const auth = getAuth();
-                    get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) =>{
-                        let email=snapshot.val()['email'];
-                        let oldUsername=snapshot.val()['username'];
-                        signInWithEmailAndPassword(auth, email, password)
-                        .then((userCredential) => {
-                            // Signed in 
-                            const user = auth.currentUser;
-                            const userId = user.uid;  
-                            updatePassword(user, newPassword).then(() =>{
-                                updateEmail(user, newEmail).then(() =>{
-                                    return set(ref(db, `users/${localStorage.getItem("userID")}/username`), username).then(() => {
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/pfp`), true).then(() =>{
-                                            return set(ref(db, `users/${localStorage.getItem("userID")}/email`), newEmail).then(() =>{
-                                                return remove(ref(db, `usernames/${oldUsername}`)).then(() => {
-                                                    return set(ref(db, `usernames/${username}`), id).then(() =>{
-                                                        window.location.href = "profilePage.html";
+                    get(child(dbRef, `users`)).then((snapshot2) => {
+                        if (snapshot2.exists()) {
+                            let ids = Object.keys(snapshot2.val());
+                            let taken=false;
+                            ids.forEach(function (id, index) {
+                                if (snapshot2.val()[id].username==username && id!=localStorage.getItem("userID")){
+                                    // warning
+                                    document.getElementById("settingsWarnings").setAttribute("style", "");
+                                    document.getElementById("settingsWarnings").innerHTML = "Username already exists";
+                                    taken=true;
+                                    return;
+                                }
+                            });
+                            if (!taken){
+                                get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) =>{
+                                    let email=snapshot.val()['email'];
+                                    let oldUsername=snapshot.val()['username'];
+                                    signInWithEmailAndPassword(auth, email, password)
+                                    .then((userCredential) => {
+                                        // Signed in 
+                                        const user = auth.currentUser;
+                                        const userId = user.uid;  
+                                        updatePassword(user, newPassword).then(() =>{
+                                            updateEmail(user, newEmail).then(() =>{
+                                                return set(ref(db, `users/${localStorage.getItem("userID")}/username`), username).then(() => {
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/pfp`), true).then(() =>{
+                                                        return set(ref(db, `users/${localStorage.getItem("userID")}/email`), newEmail).then(() =>{
+                                                            return remove(ref(db, `usernames/${oldUsername}`)).then(() => {
+                                                                return set(ref(db, `usernames/${username}`), id).then(() =>{
+                                                                    window.location.href = "profilePage.html";
+                                                                })
+                                                            })
+                                                        })
+
                                                     })
                                                 })
+                                            }).catch((error)=>{
+                                                document.getElementById("settingsWarnings").setAttribute("style", "");
+                                                document.getElementById("settingsWarnings").innerHTML = "Invalid Email"
                                             })
-
                                         })
+                                        .catch((error) => {
+                                            document.getElementById("settingsWarnings").setAttribute("style", "");
+                                            document.getElementById("settingsWarnings").innerHTML = "Invalid Password"
+                                        });
+
                                     })
-                                })
-                            })
-                            .catch((error) => {
-                            });
+                                    .catch((error) => {
+                                        document.getElementById("settingsWarnings").setAttribute("style", "");
+                                        document.getElementById("settingsWarnings").innerHTML = "Incorrect Password"
+                                        const errorCode = error.code;
+                                        const errorMessage = error.message;
+                                        console.error(error);
 
-                        })
-                        .catch((error) => {
-                            // document.getElementById("warningLogIn").setAttribute("style", "");
-                            // document.getElementById("warningLogIn").innerHTML = "Incorrect Password";
-                            const errorCode = error.code;
-                            const errorMessage = error.message;
-                            console.error(error);
-
-                        });
-                    })
+                                    });
+                                })   
+                            }
+                            
+                        } else {
+                            console.log("No data available");
+                        }
+                    }).catch((error) => {
+                        console.error(error);
+                    });
 
                 } else{
                     document.getElementById("settingsWarnings").setAttribute("style", "");
