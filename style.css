@@ -406,10 +406,8 @@ a.tooltip2:hover span {
 .editGroup {
     background-color:rgba(200, 200, 200, 0.3);
     color:black;
-    padding:5px;
+    padding:8px;
     border-radius: 10px;
-    padding-top:8px;
-    padding-bottom:8px;
 }
 .editGroup:hover {
     background-color:rgba(200, 200, 200, 0.5)

@@ -99,6 +99,10 @@
                     window.location.href="groupPage.html"
                 })
             }
+            function editGroup(groupId){
+                localStorage.setItem("editGroup",groupId);
+                window.location.href="editGroup.html"
+            }
             get(child(dbRef, `Challenge`)).then((snapshot) => {
                 if (snapshot.exists()) {
                     let d = new Date();
@@ -110,16 +114,17 @@
                     if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
                         resetChallenge();
                     }
-                    get(child(dbRef, `users/${localStorage.getItem("userID")}/groups`)).then((snapshot) =>{
-                        Object.keys(snapshot.val()).forEach(function (item, index){
-                            if (snapshot.val()[item]!="None"){
+                    get(child(dbRef, `users/${localStorage.getItem("userID")}/groups`)).then((snapshot2) =>{
+                        Object.keys(snapshot2.val()).forEach(function (item, index){
+                            if (snapshot2.val()[item]!="None"){
                                 document.getElementById(item).setAttribute("style", "")
-                                get(child(dbRef, `groups/${snapshot.val()[item]}`)).then((group) => {
+                                get(child(dbRef, `groups/${snapshot2.val()[item]}`)).then((group) => {
                                     document.getElementById(`${item}Title`).innerHTML = `${group.val()["name"]}`
                                     document.getElementById(`${item}Members`).innerHTML = `Members: ${Object.keys(group.val()["memberList"]).length}`;
                                     document.getElementById(item).addEventListener("click", () => {openGroup2(item)});
                                     if (group.val()["Owner"]==localStorage.getItem("userID")){
-                                        document.getElementById(`${item}Edit`).innerHTML = '<a href="editGroup.html" class="material-symbols-rounded editGroup">edit</a>'
+                                        document.getElementById(`${item}Edit`).innerHTML = `<div class="material-symbols-rounded editGroup">edit<div>`
+                                        document.getElementById(`${item}Edit`).addEventListener("click", () => {editGroup(snapshot2.val()[item])})
                                     }
                                 })
                             }
