@@ -177,135 +177,6 @@
                 });
             }
             document.getElementById("loginButton").addEventListener("click", () => {passwordSignIn(document.getElementById("emailLoginInput").value, document.getElementById("passwordLoginInput").value)})
-
-            function passwordSignUp(username, email, password, password2){
-                const db = getDatabase();
-                const dbRef = ref(db);
-                get(child(dbRef, `users`)).then((snapshot) => {
-                    if (snapshot.exists()) {
-                        let ids = Object.keys(snapshot.val());
-                        ids.forEach(function (id, index) {
-                            if (snapshot.val()[id].username==username){
-                                // warning
-                                document.getElementById("warningSignUp").setAttribute("style", "");
-                                document.getElementById("warningSignUp").innerHTML = "Username already exists";
-                                return;
-                            }
-                        });
-                    } else {
-                        console.log("No data available");
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-                if (password == password2 && username.length>=5 && username.length<=20){
-                    const auth = getAuth();
-                    createUserWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Signed in 
-                        const db = getDatabase();
-                        const user = userCredential.user;
-                        const userId = user.uid; 
-                        let d = new Date();   
-                        let localTime = d.getTime();
-                        let localOffset = d.getTimezoneOffset() * 60000;
-                        let utc = localTime + localOffset;
-                        let pstTime = utc+(3600000*-7);
-                        let pst = new Date(pstTime);
-                        return set(ref(db, '/users/' + user.uid), {
-                            username: username,
-                            email: email,
-                            profile_picture: "default.src",
-                            score: 0,
-                            challenges: 0,
-                            groupNum: 0,
-                            pfp: false,
-                            last5: {
-                                number1: {"Complete Your First Challenge!": ""},
-                                number2: {"Not Completed Yet": ""},
-                                number3: {"Not Completed Yet": ""},
-                                number4: {"Not Completed Yet": ""},
-                                number5: {"Not Completed Yet": ""},
-                                number6: {"Not Completed Yet": ""}
-                            },
-                            tempLogin: {
-                                date: pst.getDate(),
-                                month: pst.getMonth(),
-                                year: pst.getFullYear(),
-                                logins:1,
-                            },
-                            badges: {
-                                antiCarbonCruiser: 0,
-                                compostConqueror: 0,
-                                logins: 1,
-                                plasticPurger: 0,
-                                staticShower: 0,
-                                trasherBasher: 0
-                            },
-                            groups: {
-                                number1:"None",
-                                number2:"None",
-                                number3:"None",
-                                number4:"None",
-                                number5:"None",
-                                number6:"None",
-                                number7:"None",
-                                number8:"None",
-                                number9:"None",
-                                number10:"None"   
-                            }
-                        })
-                        .then(() => {
-                            return set(ref(db, '/usernames/' + username), user.uid).then(() =>{
-                                localStorage.setItem("openProfile", user.uid);
-                                localStorage.setItem("userID", user.uid);
-                                window.location.href = "home.html";
-                            })
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        });
-                        
-                        // ...
-                    })
-                    .catch((error) => {
-                        document.getElementById("warningSignUp").setAttribute("style", "");
-                        document.getElementById("warningSignUp").innerHTML = "Invalid Email/Password";
-                        // ..
-                    });
-                } else{
-                    if (password!=password2){
-                        document.getElementById("warningSignUp").setAttribute("style", "");
-                        document.getElementById("warningSignUp").innerHTML = "Passwords do not match";
-                    } else{
-                        document.getElementById("warningSignUp").setAttribute("style", "");
-                        document.getElementById("warningSignUp").innerHTML = "Username must be 5 - 20 Charachters";
-                    }
-                }
-            }
-            document.getElementById("signupButton").addEventListener("click", () => {passwordSignUp(document.getElementById("usernameSignupInput").value, document.getElementById("emailSignupInput").value, document.getElementById("passwordSignupInput").value, document.getElementById("password2SignupInput").value)})
-        
-            function googleSignIn(){
-                const auth = getAuth()
-                const provider = new GoogleAuthProvider();
-
-                signInWithPopup(auth, provider)
-                    .then((result) => {
-                        const credential = GoogleAuthProvider.credentialFromResult(result)
-                        var token = result.credential.accessToken;
-                        var user = result.user;
-                            
-                        console.log(token)
-                        console.log(user)
-                    }).catch(function(error) {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                            
-                        console.log(error.code)
-                        console.log(error.message)
-                    });
-                }
-            document.getElementById("googleLoginButton").addEventListener("click", () => {googleSignIn()})
         </script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
@@ -314,38 +185,18 @@
             <div style="width:1200px" class="centerContainer">
                 <br>
                 <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
                 <div>
                     <div class="loginBox"><h1 class="loginTitle">Login</h1>
                         <div id="warningLogIn" style="display:none"></div>
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Email</div>
+                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username/lEmail</div>
                         <input id="emailLoginInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password</div>
                         <input id="passwordLoginInput" type="password">
                         <div><button class="loginButton" id="loginButton">Log In</button></div>
-                        <button id="googleLoginButton">Login with Google</button>
                     </div>
                     <br>
-                    <div style="text-align:center;font-family:'Quicksand', cursive;font-size:30px;">OR</div>
                     <br>
-                    <div class="signupBox"><h1 class="signupTitle">Sign Up</h1>
-                        <div id="warningSignUp" style="display:none"></div>
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username</div>
-                        <input id="usernameSignupInput">
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Email</div>
-                        <input id="emailSignupInput">
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password</div>
-                        <input id="passwordSignupInput" type="password">
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password Retype</div>
-                        <input id="password2SignupInput" type="password">
-                        <div><button class="signupButton" id="signupButton">Sign Up</button></div>
-                    </div>
+                    <div class="signupBox centerContainer"><div style="width:80%;font-size:20px;;height:80px;" class="signupTitle"><br>Don't Have An Account?<br><a id="signUpInstead"  href ="signup.html" style="color:rgb(0, 60, 138)"> Sign Up Instead</a></div></div>
                 </div>
             </div>
         </div>
