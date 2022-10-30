@@ -95,10 +95,9 @@
             function openGroup2(groupnum){   
                 console.log(groupnum);
                 get(child(dbRef, `users/${localStorage.getItem("userID")}/groups`)).then((snapshot) => {
-                    console.log(snapshot.val()[groupnum]);
                     localStorage.setItem("openGroup", snapshot.val()[groupnum]);
+                    window.location.href="groupPage.html"
                 })
-                window.location.href="groupPage.html";
             }
             get(child(dbRef, `Challenge`)).then((snapshot) => {
                 if (snapshot.exists()) {

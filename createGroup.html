@@ -49,6 +49,7 @@
                     Year: pst.getFullYear()
                 })
             }
+
             function getMonth(monthNum){
                 let month=""
                 if (monthNum==0){
@@ -103,6 +104,7 @@
                     if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
                         resetChallenge();
                     }
+                    
                 } else {
                     console.log("No data available");
                 }
@@ -151,7 +153,7 @@
                                         last5:{
                                             lastDate:{
                                                 Date: pst.getDate(),
-                                                Month: getMonth(pst.getDate()),
+                                                Month: getMonth(pst.getMonth()),
                                                 Year: pst.getFullYear()
                                             }, 
                                             number1: {
@@ -163,14 +165,6 @@
                                                 Completed: 0
                                             }, 
                                             number3: {
-                                                Title: "None",
-                                                Completed: 0
-                                            }, 
-                                            number4: {
-                                                Title: "None",
-                                                Completed: 0
-                                            }, 
-                                            number5: {
                                                 Title: "None",
                                                 Completed: 0
                                             }
