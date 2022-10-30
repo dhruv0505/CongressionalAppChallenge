@@ -15,6 +15,7 @@
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
             import {getAuth, signOut,signInWithEmailAndPassword, GoogleAuthProvider, updatePassword, updateEmail} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
             import {getDatabase, get, ref, child, set, remove} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import { getStorage, ref as ref_storage, getDownloadURL, uploadBytes} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-storage.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -38,6 +39,8 @@
 
             const db = getDatabase(app);
             const dbRef = ref(db);
+
+            const storage=getStorage();
             function resetChallenge(){
                 let d = new Date();
                 let localTime = d.getTime();
@@ -140,7 +143,24 @@
                         if (snapshot2.exists()) {
                             localStorage.setItem("openProfile", localStorage.getItem("userID"))
                             if (snapshot2.val().pfp) {
-                                document.getElementById("pfpHome").setAttribute("src", `${profileOpenId}.png`);
+                                getDownloadURL(ref_storage(storage, `${profileOpenId}.png`))
+                                .then((url) => {
+                                    // `url` is the download URL for 'images/stars.jpg'
+
+                                    // This can be downloaded directly:
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.responseType = 'blob';
+                                    xhr.onload = (event) => {
+                                    const blob = xhr.response;
+                                    };
+                                    xhr.open('GET', url);
+                                    xhr.send();
+
+                                    // Or inserted into an <img> element
+                                    const img = document.getElementById('pfpHome');
+                                    img.setAttribute('src', url);
+                                    document.getElementById("profilePage").setAttribute("style", "margin-top:95px;");
+                                })
                             } else {
                                 document.getElementById("pfpHome").setAttribute("src", `default.png`);
                             }
@@ -152,7 +172,13 @@
                             // };
                             document.getElementById("usernameHome").innerHTML = snapshot2.val().username;
                             document.getElementById("scoreHome").innerHTML = `Score: ${snapshot2.val().score}`;
-                            document.getElementById("groupsHome").innerHTML = `Groups: ${snapshot2.val().groupNum}`;
+                            let groupNum=0;
+                            Object.keys(snapshot2.val()['groups']).forEach(function (item, index) {
+                                if (snapshot2.val()['groups'][item]!="None"){
+                                    groupNum++;
+                                }
+                            })
+                            document.getElementById("groupsHome").innerHTML = `Groups: ${groupNum}`;
                             if (profileOpenId==localStorage.getItem("userID")){
                                 document.getElementById("settings1").setAttribute("style", "")
                                 document.getElementById("usernameSettings").value=snapshot2.val()['username']
@@ -208,7 +234,7 @@
             }
             document.getElementById("myInput").addEventListener("keyup", () => {findUser()})
 
-            function updateUser(id, username, password, newPassword, newEmail){
+            function updateUser(id, username, password, newPassword, newEmail, newPFP){
                 if (username.length>=5 && username.length<=20){
                     const auth = getAuth();
                     get(child(dbRef, `users`)).then((snapshot2) => {
@@ -236,15 +262,37 @@
                                         updatePassword(user, newPassword).then(() =>{
                                             updateEmail(user, newEmail).then(() =>{
                                                 return set(ref(db, `users/${localStorage.getItem("userID")}/username`), username).then(() => {
-                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/pfp`), true).then(() =>{
-                                                        return set(ref(db, `users/${localStorage.getItem("userID")}/email`), newEmail).then(() =>{
-                                                            return remove(ref(db, `usernames/${oldUsername}`)).then(() => {
-                                                                return set(ref(db, `usernames/${username}`), id).then(() =>{
+                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/email`), newEmail).then(() =>{
+                                                        return remove(ref(db, `usernames/${oldUsername}`)).then(() => {
+                                                            return set(ref(db, `usernames/${username}`), id).then(() =>{
+                                                                if (newPFP!=""){
+                                                                    const reader = new FileReader();
+
+                                                                    console.log(newPFP)
+                                                                    // reader.addEventListener("load", () => {
+                                                                    //     let uploaded_image=reader.result;
+                                                                    //     console.log(reader.result)
+                                                                    //     document.getElementById("pfpHome").setAttribute("src", uploaded_image)
+                                                                    // })
+                                                                    reader.readAsDataURL(newPFP)
+                                                                    return set(ref(db, `users/${localStorage.getItem("userID")}/pfp`), true).then(() =>{
+                                                                        const storageRef = ref_storage(storage, `${localStorage.getItem("userID")}.png`)
+                                                                        document.getElementById("pfpHome").setAttribute("src", newPFP)
+                                                                        console.log(newPFP)
+                                                                        const metadata = {
+                                                                            contentType: 'image/png',
+                                                                        };
+                                                                        uploadBytes(storageRef, newPFP, metadata).then((im) => {
+                                                                            console.log(im)
+                                                                            // window.location.href = "profilePage.html";
+                                                                        })
+                                                                    })
+                                                                }
+                                                                else{
                                                                     window.location.href = "profilePage.html";
-                                                                })
+                                                                }
                                                             })
                                                         })
-
                                                     })
                                                 })
                                             }).catch((error)=>{
@@ -284,7 +332,7 @@
                 }
 
             }
-            document.getElementById("updateProfile").addEventListener("click", () => {updateUser(localStorage.getItem("userID"), document.getElementById("usernameSettings").value, document.getElementById("passwordSettings").value, document.getElementById("newPasswordSettings").value, document.getElementById("newEmailSettings").value)});
+            document.getElementById("updateProfile").addEventListener("click", () => {updateUser(localStorage.getItem("userID"), document.getElementById("usernameSettings").value, document.getElementById("passwordSettings").value, document.getElementById("newPasswordSettings").value, document.getElementById("newEmailSettings").value, document.getElementById("newPFP").files[0])});
         </script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
@@ -476,7 +524,7 @@
                                     <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Profile Picture</b></span>
                                 </td>
                                 <td>
-                                    <input type ="file" accept="image/png" style = "margin-left:30px;" >
+                                    <input type ="file" id="newPFP" accept="image/png" style = "margin-left:30px;" >
                                 </td>
                             </tr> 
                             
