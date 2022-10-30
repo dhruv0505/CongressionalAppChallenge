@@ -222,8 +222,10 @@
                                                     })
                                                 })
                                             }).catch((error)=>{
-                                                document.getElementById("settingsWarnings").setAttribute("style", "");
-                                                document.getElementById("settingsWarnings").innerHTML = "Invalid Email"
+                                                updatePassword(user, password).then(() => {
+                                                    document.getElementById("settingsWarnings").setAttribute("style", "");
+                                                    document.getElementById("settingsWarnings").innerHTML = "Invalid Email"
+                                                })
                                             })
                                         })
                                         .catch((error) => {
