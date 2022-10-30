@@ -399,6 +399,11 @@ a.tooltip2:hover span {
     margin: 0 0 0 5px;
 }
 /* ALL GROUPS */
+#joinWarnings{
+    color:#d72324;
+    font-size:20px;
+    font-family: 'Bebas Neue', cursive;
+}
 .createGroup {
     border: none;
     font-family: 'Quicksand', sans-serif;

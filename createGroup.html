@@ -150,8 +150,7 @@
             document.getElementById("logout").addEventListener("click", () => {signOut2()})
 
             function createNewGroup(groupName, groupDesc, limit){
-                console.log(groupDesc, limit, groupName)
-                if (groupDesc.length<=300){
+                if (limit == ""){
                         if (groupName.length>=5 && groupName.length<=10){
                             const groupsRef = ref(db, 'groups');
                             const newGroupRef = push(groupsRef);
@@ -168,42 +167,121 @@
                                     if (snapshot.val()['last5']['number1'][Object.keys(snapshot.val()['last5']['number1'])[0]]==`${pst.getDate()} ${getMonth(pst.getMonth())}, ${pst.getFullYear()}`){
                                         challengeCompleted=1;
                                         }
-                                    members[localStorage.getItem("userID")]=snapshot.val()['username'];
-                                    return set(newGroupRef, {
-                                        Owner: localStorage.getItem("userID"),
-                                        description: groupDesc,
-                                        memberLimit: limit,
-                                        memberList: members,
-                                        name: groupName,
-                                        pfp:false,
-                                        last5:{
-                                            lastDate:{
-                                                Date: pst.getDate(),
-                                                Month: getMonth(pst.getMonth()),
-                                                Year: pst.getFullYear()
-                                            }, 
-                                            number1: {
-                                                Title: challenge.val()['Title'],
-                                                Completed: challengeCompleted
-                                            }, 
-                                            number2: {
-                                                Title: "None",
-                                                Completed: 0
-                                            }, 
-                                            number3: {
-                                                Title: "None",
-                                                Completed: 0
+                                    let groupCode=""
+                                    let letters=[
+                                        "a", 
+                                        "b",
+                                        "c",
+                                        "d",
+                                        "e",
+                                        "f",
+                                        "g",
+                                        "h",
+                                        "i",
+                                        "j",
+                                        "k",
+                                        "l",
+                                        "m",
+                                        "n",
+                                        "o",
+                                        "p",
+                                        "q",
+                                        "r",
+                                        "s",
+                                        "t",
+                                        "u",
+                                        "v",
+                                        "w",
+                                        "x",
+                                        "y",
+                                        "z",
+                                        "A",
+                                        "B",
+                                        "C",
+                                        "D",
+                                        "E",
+                                        "F",
+                                        "G",
+                                        "H",
+                                        "I",
+                                        "J",
+                                        "K",
+                                        "L",
+                                        "M",
+                                        "N",
+                                        "O",
+                                        "P",
+                                        "Q",
+                                        "R",
+                                        "S",
+                                        "T",
+                                        "U",
+                                        "V",
+                                        "W",
+                                        "X",
+                                        "Y",
+                                        "Z",
+                                        "1",
+                                        "2",
+                                        "3",
+                                        "4",
+                                        "5",
+                                        "6",
+                                        "7",
+                                        "8",
+                                        "9"
+                                    ]
+                                    get(child(dbRef, `groupCodes`)).then((codes) =>{
+                                        while (true) {
+                                            groupCode=letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)]+letters[Math.floor(Math.random()*letters.length)]
+                                            if (!(groupCode in Object.keys(codes.val()))){
+                                                break;
                                             }
                                         }
-                                    }).then(() =>{
-                                        for (var i = 1; i < 11; i++){
-                                            if (snapshot.val()["groups"][`number${i}`]=="None"){
-                                                return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), newGroupRef.key)
-                                            }
+                                        return set(ref(db, `groupCodes/${groupCode}`), newGroupRef.key).then(() => {
+                                            for (var i = 1; i < 11; i++){
+                                                if (snapshot.val()["groups"][`number${i}`]=="None"){
+                                                    
+                                                    members[localStorage.getItem("userID")]=snapshot.val()['username'];
+                                                    return set(newGroupRef, {
+                                                        Owner: localStorage.getItem("userID"),
+                                                        description: groupDesc,
+                                                        memberLimit: limit,
+                                                        memberList: members,
+                                                        name: groupName,
+                                                        pfp:false,
+                                                        last5:{
+                                                            lastDate:{
+                                                                Date: pst.getDate(),
+                                                                Month: getMonth(pst.getMonth()),
+                                                                Year: pst.getFullYear()
+                                                            }, 
+                                                            number1: {
+                                                                Title: challenge.val()['Title'],
+                                                                Completed: challengeCompleted
+                                                            }, 
+                                                            number2: {
+                                                                Title: "None",
+                                                                Completed: 0
+                                                            }, 
+                                                            number3: {
+                                                                Title: "None",
+                                                                Completed: 0
+                                                            }
+                                                        },
+                                                        code: groupCode
+                                                    }).then(() =>{
+                                                        return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), newGroupRef.key).then(() => { 
+                                                            localStorage.setItem("openGroup", newGroupRef.key);
+                                                            window.location.href="groupPage.html"
+                                                        })
+                                                    })
+                                                }
 
-                                        }
-                                        localStorage.setItem("openGroup", newGroupRef.key);
-                                        window.location.href="groupPage.html"
+                                            }
+                                            document.getElementById("createWarnings").innerHTML="You Have Reached Your Group Limit"
+                                            document.getElementById("createWarnings").setAttribute("style", "")
+                                        })
 
                                     })
                                 })
@@ -216,12 +294,12 @@
                     }
                 } else {
                     console.log("fai2l")
-                    // Warn description exceeds 300 Charachter limit
+                        document.getElementById("createWarnings").innerHTML="Please set a member limit"
+                        document.getElementById("createWarnings").setAttribute("style", "")
                 }
             }
             document.getElementById("createGroup").addEventListener("click", () => {createNewGroup(document.getElementById("groupNameFeild").value, document.getElementById("groupDescFeild").value, document.getElementById("memberLimitCreate").value)})
         </script>
-        <script src="script.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
     <body>

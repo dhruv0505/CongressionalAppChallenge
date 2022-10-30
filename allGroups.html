@@ -162,7 +162,53 @@
                 }
             }).catch((error) => {
                 console.error(error);
-            });          
+            });        
+            
+            function joinGroup(groupCode){
+                get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
+                    let taken = true;
+                    for (var i = 1; i < 11; i++){
+                        if (snapshot.val()["groups"][`number${i}`]=="None"){
+                            taken=false;
+                            get(child(dbRef, `groupCodes/${groupCode}`)).then((groupId) => {
+                                if (groupId.exists()){
+                                    get(child(dbRef,  `groups/${groupId.val()}`)).then((group) => {
+                                        if (group.val()['memberLimit']==Object.keys(group.val()['memberList']).length){
+                                            document.getElementById("joinWarnings").innerHTML="Group has reached its limit"
+                                            document.getElementById("joinWarnings").setAttribute("style", "")
+                                        } else if (localStorage.getItem("userID") in group.val()['memberList']){
+                                            document.getElementById("joinWarnings").innerHTML="Already in this group!"
+                                            document.getElementById("joinWarnings").setAttribute("style", "")
+                                        } else {
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), groupId.val()).then(() => {
+                                                return set(ref(db, `groups/${groupId.val()}/memberList/${localStorage.getItem}`)).then(() => {
+                                                    localStorage.setItem("openGroup", groupId.val())
+                                                    window.location.href="groupPage.html"
+                                                })
+                                            })
+                                        }
+                                    })
+                                } else {
+                                    document.getElementById("joinWarnings").innerHTML="Invalid Group Code"
+                                    document.getElementById("joinWarnings").setAttribute("style", "")
+                                    return;
+                                }
+                            }).catch((error) => {
+                                document.getElementById("joinWarnings").innerHTML="Invalid Group Code"
+                                document.getElementById("joinWarnings").setAttribute("style", "")
+                                console.error(error);
+                                return;
+                            })
+                        }
+                    }
+                    if (taken){
+                        document.getElementById("joinWarnings").innerHTML="Reached Group Limit"
+                        document.getElementById("joinWarnings").setAttribute("style", "")
+                    }
+
+                });
+            }
+            document.getElementById("joinbtn").addEventListener("click", ()=> {joinGroup(document.getElementById("joinCode").value)})
             function signOut2(){
                 const auth = getAuth();
                 signOut(auth).then(() => {
@@ -208,14 +254,9 @@
                             <tr>
                                 <td style="text-align: center;;">
                                 <div style = "vertical-align: center;font-size: 35px;"> <b>JOIN</div>
-                                <input type="number" min="10000" max = 99999 maxlength="5" placeholder="Enter Code" style="margin-top: 10px;text-align: center;width: 170;height: 33;font-size: 25;padding-left: 10;border-radius: 10px;">
-                                <div><button id = "joinbtn" onclick = "joinbtn()" style="border-radius: 5px;font-size:19;margin-top: 2px;">Join</div>
-                                <script>
-                                    function joinbtn(){
-                                        const btn = document.getElementById("joinbtn");
-                                        btn.textContent = "Joined";
-                                    }
-                                </script>
+                                    <div id="joinWarnings" style="display:none">Test</div>
+                                <input maxlength="6" id="joinCode" placeholder="Enter Code" style="margin-top: 10px;text-align: center;width: 170;height: 33;font-size: 25;padding-left: 10;border-radius: 10px;">
+                                <div id = "joinbtn" style="border-radius: 5px;font-size:19;margin-top: 2px;">Join</div>
                                 </td>
                             </tr>
                             <tr style="padding-top: 0;">
