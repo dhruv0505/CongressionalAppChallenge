@@ -41,12 +41,38 @@
                 let utc = localTime + localOffset;
                 let pstTime = utc+(3600000*-7);
                 let pst = new Date(pstTime);
-                return set(ref(db, `Challenge`), {
-                    Category: "Water",
-                    Date: pst.getDate(),
-                    Month: pst.getMonth(),
-                    Title: "5 Minute Shower or Less",
-                    Year: pst.getFullYear()
+                let newChallengeTitle = "";
+                let newChallengeCategory=""
+                get(child(dbRef, `Challenges`)).then((challenges) => {
+                    if (Object.keys(challenges.val()['iterationChallenges']).length==1){
+                        newChallengeTitle = Object.keys(challenges.val()['iterationChallenges'])[0]
+                        newChallengeCategory = challenges.val()['iterationChallenges'][Object.keys(challenges.val()['iterationChallenges'])[0]]
+                        set(ref(db, `Challenges/iterationChallenges`), challenges.val()['All Challenges']).then(() => {
+                            console.log(newChallengeCategory, newChallengeTitle)
+                            return set(ref(db, `Challenge`), {
+                                Category: newChallengeCategory,
+                                Date: pst.getDate(),
+                                Month: pst.getMonth(),
+                                Title: newChallengeTitle,
+                                Year: pst.getFullYear()
+                            })
+                        })                      
+                    }
+                    else {
+                        
+                        newChallengeTitle = Object.keys(challenges.val()['iterationChallenges'])[Math.floor(Math.random()*Object.keys(challenges.val()['iterationChallenges']).length)]
+                        newChallengeCategory = challenges.val()['iterationChallenges'][newChallengeTitle]
+                        remove(ref(db, `Challenges/iterationChallenges/${newChallengeTitle}`)).then(() => {
+                            console.log(newChallengeCategory, newChallengeTitle)
+                            return set(ref(db, `Challenge`), {
+                                Category: newChallengeCategory,
+                                Date: pst.getDate(),
+                                Month: pst.getMonth(),
+                                Title: newChallengeTitle,
+                                Year: pst.getFullYear()
+                            })
+                        })
+                    }
                 })
             }
 
@@ -101,7 +127,7 @@
                     let utc = localTime + localOffset;
                     let pstTime = utc+(3600000*-7);
                     let pst = new Date(pstTime);
-                    if (snapshot.val()["Month"]!=getMonth(pst.getMonth()) || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
+                    if (snapshot.val()["Month"]!=pst.getMonth() || snapshot.val()["Date"]!=pst.getDate() || snapshot.val()["Year"]!=pst.getFullYear()){
                         resetChallenge();
                     }
                     
