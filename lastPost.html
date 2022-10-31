@@ -81,7 +81,7 @@
                             nextPost();
                         } else {
                             document.getElementById("lastPostTitle").innerHTML = Object.keys(snapshot.val()[currentPost])[0];
-                            document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val().number1)[0]]
+                            document.getElementById("lastPostDate").innerHTML = snapshot.val()[currentPost][Object.keys(snapshot.val()[currentPost])[0]]
                         }
                     } else {
                         console.log("No data available");

@@ -380,7 +380,8 @@ a.tooltip2:hover span {
     font-family: 'Bebas Neue', sans-serif;
 }
 
-.score-card .leader .user .user-pic {
+.score-card .leader .user .user-pic
+ {
     background: #800000;
     border-radius: 50%;
     width: 45px;
@@ -506,12 +507,12 @@ a.tooltip2:hover span {
 .groupPageDashboard{
     display:grid;
     grid-template-columns: 35% 65%;
-    grid-template-rows: 400px 560px 65px auto;
+    grid-template-rows: 350px 350px 25px auto;
     row-gap:10px;
     column-gap:25px;
 }
 .titleGroupPage{
-    font-size:50px;
+    font-size:60px;
     grid-row:1;
     grid-column:1;
     font-family: 'Bebas Neue', sans-serif;
@@ -529,7 +530,7 @@ a.tooltip2:hover span {
     font-family: 'Bebas Neue', sans-serif;
 }
 .leaderboardGroupPage{
-    grid-row:1/span 3;
+    grid-row:1/span 2;
     width: 100%;
     border-radius:3px;
     grid-column:2;

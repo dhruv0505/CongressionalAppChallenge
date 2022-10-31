@@ -99,7 +99,23 @@
                 
 
                 get(child(dbRef, `users/${groupOwner}`)).then((groupOwner1) => {
-                    document.getElementById('groupTitle').innerHTML=groupName;
+                    getDownloadURL(ref_storage(storage, `${localStorage.getItem("openGroup")}.png`))
+                    .then((url) => {
+                        // `url` is the download URL for 'images/stars.jpg'
+
+                        // This can be downloaded directly:
+                        const xhr = new XMLHttpRequest();
+                        xhr.responseType = 'blob';
+                        xhr.onload = (event) => {
+                        const blob = xhr.response;
+                        };
+                        xhr.open('GET', url);
+                        xhr.send();
+
+                        // Or inserted into an <img> element
+                        document.getElementById('imageGroupPage').setAttribute("src", url)
+                    })
+                    document.getElementById('groupTitle').innerHTML=`&nbsp;${groupName}`;
                     document.getElementById('memscnt').innerHTML=`Members: ${groupCount}/${groupLimit}`;
                     document.getElementById('groupDescrip').innerHTML=groupDesc;
                     document.getElementById('groupmemCount').innerHTML=`Rank 2/${groupCount}`;
@@ -238,7 +254,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - BADGES</td>
+                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - GROUP PAGE</td>
                     <td><div style="width:258px;display:flex;justify-content:flex-end;"><a class="navOption centerContainer tooltip2" id="logout"><div class="material-symbols-rounded" style="font-size:30px;">logout</div><span>Log Out</span></a></div></td>
                 </tr>
             </table>
@@ -246,14 +262,14 @@
         <div class="centerContainer" id="groupPage" style="margin-top:95px;display:none">
             <div class="groupPageDashboard" style="width:1200px;">
                 <div>
-                    <div class="titleGroupPage" id ='groupTitle'></div>
-                    <div style = "font-size: 25; font-family: Quicksand;padding-bottom: 10px;" id ='memscnt'></div>
+                    <img id="imageGroupPage" style="width:45px;height:45px;border-radius:50%;">
+                    <span class="titleGroupPage" id ='groupTitle'></span>
+                    <div style = "font-size: 25px; font-family: Quicksand;padding-bottom: 10px;" id ='memscnt'></div>
                     <div class="container" style = "overflow-wrap: break-word;font-size: 21; font-family: Quicksand; width:400px;" id ='groupDescrip'></div>
-                    <div  style = "display:block;font-size: 25; font-family: Quicksand" id ='groupPfp'></div>
-                    <div class = "flex-container" style ="background-color: aquamarine;width:264px;padding:6px;border-radius: 5px;padding-left: 12px;padding-right: 0px;margin-top: 7px;">                        
+                    <div class = "flex-container" style ="background-color: aquamarine;width:285px;padding:6px;border-radius: 5px;padding-left: 12px;padding-right: 0px;margin-top: 7px;">                        
                         <div style="display:inline-block;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>Code</b></div>
                         <div id = "grpcode" style="display:inline-block;width: 100px;vertical-align: middle;font-family: 'Courier', serif;color:rgb(0, 0, 0);font-size:22px; padding: 10px; border-radius: 5px;letter-spacing: 5px;"> </div>
-                        <div style="display:inline-block;">
+                        <div style="float:right;margin-left:5px;">
                             <button id="btn"  onclick="copytxt('grpcode')" style="background-color: rgb(238, 101, 140);border-radius: 5px;border:rgb(238,101,140);margin-right: 10px;padding: 8px;">
                                 <b id="copybtn" style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:21px;">
                                     Copy
@@ -278,17 +294,21 @@
                 <br>
                 <div class="groupChallengeCompletion">
                     <div class="groupChallenge centerContainer" id="challcontain">
-                        <div style="font-size:40px;margin-right: 12px;" id="challname"></div>
+                        <div style="width:300px">
+                        <div style="font-size:35px;margin-right: 12px;" id="challname"></div></div>
                         <div class="centerContainer" style="font-size:30px;"><div style="color:#379683" id="completion2"></div><div style = "color: #2f7b6b" id="completion"></div></div>
+
                     </div>
                     <br>
                     <div class="groupChallenge centerContainer" id="challcontain">
-                        <div style="font-size:40px;margin-right: 12px;" id="challname"></div>
+                        <div style="width:300px">
+                        <div style="font-size:35px;margin-right: 12px;" id="challname"></div></div>
                         <div class="centerContainer" style="font-size:30px;"><div style="color:#379683" id="completion2"></div><div style = "color: #2f7b6b"  id="completion"></div></div>
                     </div>
                     <br>
                     <div class="groupChallenge centerContainer" id="challcontain">
-                        <div style="font-size:40px;margin-right: 12px;" id="challname"></div>
+                        <div style="width:300px">
+                        <div style="font-size:35px;margin-right: 12px;" id="challname"></div></div>
                         <div class="centerContainer" style="font-size:30px;"><div style="color:#379683" id="completion2"></div><div style = "color: #2f7b6b"  id="completion"></div></div>
                     </div>
                     <br>
@@ -453,10 +473,6 @@
                         </div>
                     </div>
                 </div>
-                </div>
-                <div class="peopleGroupPageTitle">People:</div>
-                <div class = "people">
-                    
                 </div>
             </div>
         </div>

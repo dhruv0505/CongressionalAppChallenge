@@ -334,19 +334,20 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - BADGES</td>
+                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - CREATE GROUP</td>
                     <td><div style="width:258px;display:flex;justify-content:flex-end;"><a class="navOption centerContainer tooltip2" id="logout"><div class="material-symbols-rounded" style="font-size:30px;">logout</div><span>Log Out</span></a></div></td>
                 </tr>
             </table>
         </div>
 
         <div id = "createGroupPage" style = "display:none;">
+            <div class="centerContainer"><div style="width:1200px">
             <div class="warning" id="createWarnings" style="display:none"></div>
-            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);">NEW GROUP</div>
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:1px solid rgb(87, 236, 186);box-shadow:5px 5px 5px #282828;">NEW GROUP</div>
 
 
             <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
-                <table style="height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;margin-left: 20px;">
+                <table style="height: 83;background-color: rgb(232, 61, 110);border:1px solid black;margin-left: 20px;box-shadow:5px 5px 5px #282828;border-radius:5px;">
                     
                     <tr >
                         <td>                        
@@ -380,12 +381,11 @@
 
 
             
-            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:3px solid rgb(87, 236, 186);margin-top: 312px;">SETTINGS</div>
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:1px solid rgb(87, 236, 186);margin-top: 312px;box-shadow:5px 5px 5px #282828;">SETTINGS</div>
 
 
             <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
-                <div class="warning" id="editWarnings" style="display:none"></div>
-                <table style="border-collapse: collapse;height: 83;background-color: rgb(232, 61, 110);border:3.5px solid black;border-radius: 8px;margin-left: 20px;padding: 5px;">
+                <table style="height: 83;background-color: rgb(232, 61, 110);border-radius: 8px;margin-left: 20px;padding: 5px;box-shadow:5px 5px 5px #282828;border:1px solid">
                     
                     <!-- <tr>
                         
@@ -400,18 +400,17 @@
                         </td>
                     </tr> 
                     <tr> -->
-                    <form>
+                    <tr>
                         
-                        <td style="border-top: 2px dotted;border-collapse: collapse;">
+                        <td>
                             <label style="margin-left: 15;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>1</b></label>
-                            <input name  = "amountRange" value = "5000" type = "range" min="1" max="5000" style = "vertical-align: middle;margin-left: 1px;" oninput="this.form.amountInput.value=this.value"/>
+                            <input name  = "amountRange" value = "5000" type = "range" min="1" max="5000" style = "margin-bottom:15px;vertical-align: middle;margin-left: 1px;" oninput="this.form.amountInput.value=this.value"/>
                             <label style="vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px; border-radius: 5px;"><b>5000</b></label>                        
                         </td>
-                        <td style="border-top: 2px dotted;border-collapse: collapse;">                        
+                        <td>                        
                             <span style="width:300px;vertical-align: middle;margin-top: 40px;margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 20px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Member Limit</b></span>
-                            <input name = "amountInput" oninput="this.form.amountRange.value=this.value" id="memberLimitCreate" type = "number" min = 1 max=5000 style="width:84px;vertical-align: middle;font-family:  monospace, serif;color:rgb(0, 0, 0);font-size:24px; padding: 5px; border-radius: 5px;height: 30;">
+                            <input name = "amountInput" oninput="this.form.amountRange.value=this.value" id="memberLimitCreate" type = "number" min = 1 max=5000 style="margin-bottom:10px;width:84px;vertical-align: middle;font-family:  monospace, serif;color:rgb(0, 0, 0);font-size:24px; padding: 5px; border-radius: 5px;height: 30;">
                         </td>
-                    </form>
                     </tr> 
                 
                     
@@ -436,7 +435,6 @@
                                     var copyText = document.getElementById(id).innerHTML;
                                     
                                     navigator.clipboard.writeText(copyText);
-
                                     document.getElementById("copybtn").innerHTML = "Copied";
                                     document.getElementById("btn").style.backgroundColor = "rgb(24, 240, 117)";
                                                         
@@ -455,7 +453,8 @@
                 <br>
                 <br>
                 <div id="createGroup" style="width:115px;margin-top: 30px;border: 3px solid rgb(7, 182, 182);margin-left: 5px;background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;"><label style="font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">CREATE</label></div>  
-            </div>     
+            </div>    
+        </div></div> 
         </div>
     </body>
 </html>
