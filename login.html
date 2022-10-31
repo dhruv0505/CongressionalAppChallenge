@@ -64,21 +64,6 @@
                     }
                 })
             }
-            function resetChallenge(){
-                let d = new Date();
-                let localTime = d.getTime();
-                let localOffset = d.getTimezoneOffset() * 60000;
-                let utc = localTime + localOffset;
-                let pstTime = utc+(3600000*-7);
-                let pst = new Date(pstTime);
-                return set(ref(db, `Challenge`), {
-                    Category: "Water",
-                    Date: pst.getDate(),
-                    Month: pst.getMonth(),
-                    Title: "5 Minute Shower or Less",
-                    Year: pst.getFullYear()
-                })
-            }
             function getMonth(monthNum){
                 let month=""
                 if (monthNum==0){
@@ -205,14 +190,22 @@
                                 const errorMessage = error.message;
                                 console.error(error);
                             })
+                        }).catch((error) => {
+                            console.log("test")
+                            document.getElementById("warningLogIn").setAttribute("style", "");
+                            document.getElementById("warningLogIn").innerHTML = "Invalid Username/Email and Password";
+                            const errorCode = error.code;
+                            const errorMessage = error.message;
+                            console.error(error);
                         })
 
                     }).catch((error) => {
+                        console.log("test")
                         document.getElementById("warningLogIn").setAttribute("style", "");
                         document.getElementById("warningLogIn").innerHTML = "Invalid Username/Email and Password";
                         const errorCode = error.code;
                         const errorMessage = error.message;
-                        console.error(error);
+                        // console.error(error);
                     })
 
                 });
@@ -229,7 +222,7 @@
                 <div>
                     <div class="loginBox"><h1 class="loginTitle">Login</h1>
                         <div id="warningLogIn" style="display:none"></div>
-                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username/lEmail</div>
+                        <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Username/Email</div>
                         <input id="emailLoginInput">
                         <div style="margin-left:40px;font-size:20px;color:rgb(200,200,200);font-family: 'Bebas Neue', cursive;">Password</div>
                         <input id="passwordLoginInput" type="password">

@@ -66,8 +66,20 @@
     border-radius: 10px;
 }
 /* ALL PAGES */
+input {
+    margin-top: 1rem;
+}
+
+input::file-selector-button {
+    font-weight: bold;
+    color: ;
+    padding: 5px;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+
 body {
-    background-color: #379683;
+    background-color: #eae2ce;
 }  
 .nav {
     top: 0;
@@ -436,14 +448,35 @@ a.tooltip2:hover span {
     background-color: rgba(200, 200, 200, 0.5);
 }
 .group {
-    background-color: rgb(145, 203, 244);
+    background-color: #379683;
     margin: 15px;
     width: 240px;
-    border-color: rgb(0, 60, 138);
-    border-width: 3px;
+    border-color: #256a5c;
+    border-width: 1.5px;
+    box-shadow:5px 5px 7px black;
     border-style: solid;
     height: 330px;
-    border-radius: 20px;
+    border-radius: 10px;
+}
+
+#joinbtn {
+    border-radius: 3px;
+    padding:2px;
+    font-size:20px;
+    height:27px;
+    margin-left:4px;
+    cursor:pointer;
+    width:50px;
+    background-color:#d070ad60;
+}
+#joinbtn:hover{
+    background-color:#337aa27a
+}
+#createGroupAll {
+    background-color:#d070ad60;
+}
+#createGroupAll:hover{
+    background-color:#337aa27a
 }
 
 .textGroup>img {
@@ -468,7 +501,7 @@ a.tooltip2:hover span {
 .groupPageDashboard{
     display:grid;
     grid-template-columns: 35% 65%;
-    grid-template-rows: 45px 560px 65px auto;
+    grid-template-rows: 400px 560px 65px auto;
     row-gap:10px;
     column-gap:25px;
 }

@@ -49,6 +49,7 @@
                     if (Object.keys(challenges.val()['iterationChallenges']).length==1){
                         newChallengeTitle = Object.keys(challenges.val()['iterationChallenges'])[0]
                         newChallengeCategory = challenges.val()['iterationChallenges'][Object.keys(challenges.val()['iterationChallenges'])[0]]
+                        console.log(challenges.val()['iterationChallenges'])
                         set(ref(db, `Challenges/iterationChallenges`), challenges.val()['All Challenges']).then(() => {
                             console.log(newChallengeCategory, newChallengeTitle)
                             return set(ref(db, `Challenge`), {
@@ -170,6 +171,7 @@
                                     if (group.val()["Owner"]==localStorage.getItem("userID")){
                                         document.getElementById(`${item}Edit`).innerHTML = `<div class="material-symbols-rounded editGroup">edit<div>`
                                         document.getElementById(`${item}Edit`).addEventListener("click", () => {editGroup(snapshot2.val()[item])})
+                                        document.getElementById(`${item}Edit`).setAttribute('style', 'display:inline;margin-left:3px;')
                                     }
                                 })
                             }
@@ -181,37 +183,50 @@
                 }
             }).catch((error) => {
                 console.error(error);
-            });        
-            
+            });  
+
             function joinGroup(groupCode){
                 get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
                     let taken = true;
-                    for (var i = 1; i < 11; i++){
+                    for (var i = 1; i < 10; i++){
                         if (snapshot.val()["groups"][`number${i}`]=="None"){
                             taken=false;
                             get(child(dbRef, `groupCodes/${groupCode}`)).then((groupId) => {
-                                if (groupId.exists()){
-                                    get(child(dbRef,  `groups/${groupId.val()}`)).then((group) => {
-                                        if (group.val()['memberLimit']==Object.keys(group.val()['memberList']).length){
-                                            document.getElementById("joinWarnings").innerHTML="Group has reached its limit"
-                                            document.getElementById("joinWarnings").setAttribute("style", "")
-                                        } else if (localStorage.getItem("userID") in group.val()['memberList']){
-                                            document.getElementById("joinWarnings").innerHTML="Already in this group!"
-                                            document.getElementById("joinWarnings").setAttribute("style", "")
-                                        } else {
-                                            return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), groupId.val()).then(() => {
-                                                return set(ref(db, `groups/${groupId.val()}/memberList/${localStorage.getItem}`)).then(() => {
-                                                    localStorage.setItem("openGroup", groupId.val())
-                                                    window.location.href="groupPage.html"
+                                groupId=groupId.val()
+                                console.log(groupCode)
+                                console.log(groupId)
+                                get(child(dbRef,  `groups/${groupId}`)).then((group) => {
+                                    if (localStorage.getItem("userID") in group.val()['memberList']){
+                                        document.getElementById("joinWarnings").innerHTML="Already in this group!"
+                                        document.getElementById("joinWarnings").setAttribute("style", "")
+                                    } else if (group.val()['memberLimit']==Object.keys(group.val()['memberList']).length){
+                                        document.getElementById("joinWarnings").innerHTML="Group has reached its limit"
+                                        document.getElementById("joinWarnings").setAttribute("style", "")
+                                    } else {
+                                        return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), groupId).then(() => {
+                                            get(ref(db, `groups/${groupId}/memberList`)).then((listOfMem) => {
+                                                console.log(listOfMem.val())
+                                                let thedict = listOfMem.val()
+                                                
+                                                get(ref(db, `users/${localStorage.getItem("userID")}`)).then((username) => {
+                                                    username = username.val()["username"]
+                                                    console.log(username)
+                                                    thedict[localStorage.getItem("userID")] = username
+                                                    get(ref(db, `groups/${groupId}/memberList`)).then((username) => {
+                                                        console.log(username.val())
+                                                        console.log(thedict)
+                                                    })
+                                                    return set(ref(db, `groups/${groupId}/memberList`), thedict).then(() => {
+                                                        console.log("yes")
+                                                        localStorage.setItem("openGroup", groupId)
+                                                        window.location.href="groupPage.html"
+                                                    })
                                                 })
                                             })
-                                        }
-                                    })
-                                } else {
-                                    document.getElementById("joinWarnings").innerHTML="Invalid Group Code"
-                                    document.getElementById("joinWarnings").setAttribute("style", "")
-                                    return;
-                                }
+                                        })
+                                    }
+                                })
+                                // shdfbvif
                             }).catch((error) => {
                                 document.getElementById("joinWarnings").innerHTML="Invalid Group Code"
                                 document.getElementById("joinWarnings").setAttribute("style", "")
@@ -263,25 +278,28 @@
                 </tr>
             </table>
         </div>
-        <div class="centerContainer" id="allGroupsPage" style="margin-top:75px;display:none;">
+        <div class="centerContainer" id="allGroupsPage" style="margin-top:95px;display:none;">
             <div class="allGroupsDashboard" style="width:1200px">
-                <h1>MY GROUPS:</h1>
-                <table style="width:100%">
+                <table style="width:100%;margin-top:20px">
                 <tr>
                     <td>
-                        <table  style="background-color: rgb(7, 195, 195);align-items: center; padding: 20;border-radius: 100px;border: 4px solid black;">
+                        <h1 style="text-align:center;margin-right:20px">MY GROUPS&nbsp<span class="material-symbols-rounded" style="color:black;margin-left:-5px;">chevron_right</span></h1>
+                        <table class="centerContainer"  style="background-color: rgba(2, 74, 168, 0.361);border-radius: 5px; padding:10px;width: 250px;margin-left:10px;box-shadow:5px 5px 5px #282828;">
                             <tr>
-                                <td style="text-align: center;;">
-                                <div style = "vertical-align: center;font-size: 35px;"> <b>JOIN</div>
-                                    <div id="joinWarnings" style="display:none">Test</div>
-                                <input maxlength="6" id="joinCode" placeholder="Enter Code" style="margin-top: 10px;text-align: center;width: 170;height: 33;font-size: 25;padding-left: 10;border-radius: 10px;">
-                                <div id = "joinbtn" style="border-radius: 5px;font-size:19;margin-top: 2px;">Join</div>
-                                </td>
+                                <td style="text-align: center;">
+                                <div style = "font-size: 35px;font-family:'Quicksand', sans-serif;margin-bottom:3px">Join: </div>
+                                <div id="joinWarnings" style="display:none;"></div>
+                                <div class="centerContainer">
+                                    <input maxlength="6" id="joinCode" placeholder="Enter Code" style="border-radius: 3px;border:none;width:125px;font-size:20px;height:30px;font-family:'Quicksand', sans-serif;text-align:center;text-align:center">
+                                    <div id = "joinbtn" class="centerContainer"><span class="material-symbols-rounded" style="color:rgb(89, 0, 0)">check</span></div>
+                                </div> 
+                            </td>
+            
                             </tr>
                             <tr style="padding-top: 0;">
                                 <td style="margin-top: 0;text-align: center;">
-                                    <div style="font-size:35px;text-align: center;margin-top: 30px;"><b>CREATE</div>
-                                    <div class="centerContainer"><a href="createGroup.html" id="createGroupAll" style="width:50px;height:50px;border-radius:30%" class="centerContainer"><span class="material-symbols-rounded" style="font-size:80px;color:black;">add_circle</span></a></div>
+                                    <div style = "font-size: 35px;font-family:'Quicksand', sans-serif;margin-top:5px">Create: </div>
+                                    <div class="centerContainer"><a href="createGroup.html" id="createGroupAll" style="width:40px;height:30px;border-radius:30%" class="centerContainer"><span class="material-symbols-rounded" style="font-size:40px;color:rgb(89, 0, 0)">add_circle</span></a></div>
                                 </td>
                             </tr>
                         </table>
@@ -292,7 +310,7 @@
                             <div id="number1Edit" style="display:inline">
                             </div>
                             <img id="number1Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number1Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number1Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                     <td style = "height:10px"><div class="group" id="number2" style="visibility:hidden">
@@ -301,7 +319,7 @@
                             <div id="number2Edit" style="display:inline">
                             </div>
                             <img id="number2Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number2Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number2Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                     <td style = "height:10px"><div class="group" id="number3" style="visibility:hidden">
@@ -310,7 +328,7 @@
                             <div id="number3Edit" style="display:inline">
                             </div>
                             <img id="number3Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number3Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number3Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                      
@@ -323,7 +341,7 @@
                             <div id="number4Edit" style="display:inline">
                             </div>
                             <img id="number4Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number4Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number4Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                     <td style = "height:10px"><div class="group" id="number5" style="visibility:hidden">
@@ -332,7 +350,7 @@
                             <div id="number1Edit" style="display:inline">
                             </div>
                             <img id="number5Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number5Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number5Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                     <td style = "height:10px"><div class="group" id="number6" style="visibility:hidden">
@@ -341,7 +359,7 @@
                             <div id="number6Edit" style="display:inline">
                             </div>
                             <img id="number6Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number6Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number6Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                     <td style = "height:10px"><div class="group" id="number7" style="visibility:hidden">
@@ -350,7 +368,7 @@
                             <div id="number7Edit" style="display:inline">
                             </div>
                             <img id="number7Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number7Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number7Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td>  
                 </tr>
@@ -361,7 +379,7 @@
                             <div id="number8Edit" style="display:inline">
                             </div>
                             <img id="number8Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number8Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number8Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td> 
                     <td style = "height:10px"><div class="group" id="number9" style="visibility:hidden">
@@ -370,7 +388,7 @@
                             <div id="number9Edit" style="display:inline">
                             </div>
                             <img id="number9Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number9Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px"></div>
+                            <div id="number9Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px"></div>
                         </div>
                     </div></td>   
                     <td style = "height:10px"><div class="group" id="number10" style="visibility:hidden">
@@ -379,7 +397,7 @@
                             <div id="number10Edit" style="display:inline">
                             </div>
                             <img id="number10Image" style="width:150px;height:150px;margin-top:10px"src="">
-                            <div id="number10Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 3px;"></div>
+                            <div id="number10Members" style="vertical-align: middle;font-family: '', serif;color:rgb(90, 4, 4);font-size:25px; border-radius: 5px;margin-top: 10px;"></div>
                         </div>
                     </div></td>  
                 </tr>
