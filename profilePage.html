@@ -261,6 +261,12 @@
                                         const userId = user.uid;  
                                         updatePassword(user, newPassword).then(() =>{
                                             updateEmail(user, newEmail).then(() =>{
+                                                Object.keys(snapshot.val()['groups']).forEach(function(item, index){
+                                                    if(snapshot.val()['groups'][item]!="None"){
+                                                        
+                                                        set(ref(db, `groups/${snapshot.val()['groups'][item]}/memberList/${localStorage.getItem("userID")}`), username)
+                                                    }
+                                                })
                                                 return set(ref(db, `users/${localStorage.getItem("userID")}/username`), username).then(() => {
                                                     return set(ref(db, `users/${localStorage.getItem("userID")}/email`), newEmail).then(() =>{
                                                         return remove(ref(db, `usernames/${oldUsername}`)).then(() => {
@@ -284,7 +290,7 @@
                                                                         };
                                                                         uploadBytes(storageRef, newPFP, metadata).then((im) => {
                                                                             console.log(im)
-                                                                            // window.location.href = "profilePage.html";
+                                                                            window.location.href = "profilePage.html";
                                                                         })
                                                                     })
                                                                 }

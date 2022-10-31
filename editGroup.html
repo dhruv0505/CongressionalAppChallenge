@@ -15,6 +15,7 @@
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
             import {getAuth, signOut, GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
             import {getDatabase, get, ref, child, set, push} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
+            import { getStorage, ref as ref_storage, getDownloadURL, uploadBytes} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-storage.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -119,6 +120,7 @@
 
             const db = getDatabase(app);
             const dbRef = ref(db);
+            const storage=getStorage();
             if (typeof localStorage.getItem("editGroup") !== "string"){
                 window.location.href="allGroups.html"
             }
@@ -164,16 +166,28 @@
             }
             document.getElementById("logout").addEventListener("click", () => {signOut2()})
 
-            function editNewGroup(groupName, groupDesc, limit){
-                console.log(groupDesc, limit, groupName)
+            function editNewGroup(groupName, groupDesc, limit, newPFP){
                 if (groupDesc.length<=300){
-                    if (groupName.length>=5 && groupName.length<10){
+                    if (groupName.length>=5 && groupName.length<=10){
                         get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) =>{
                             return set(ref(db, `groups/${localStorage.getItem("editGroup")}/description`),  groupDesc).then(() =>{
                                 return set(ref(db, `groups/${localStorage.getItem("editGroup")}/name`),  groupName).then(() =>{
                                     return set(ref(db, `groups/${localStorage.getItem("editGroup")}/memberLimit`),  limit).then(() =>{
-                                        localStorage.setItem("openGroup", localStorage.getItem("editGroup"));
-                                        window.location.href="groupPage.html"
+                                        if (newPFP != undefined){
+                                            const storageRef=ref_storage(storage, `${localStorage.getItem("editGroup")}.png`)
+                                            const reader = new FileReader();
+                                            reader.readAsDataURL(newPFP)
+                                            const metadata = {
+                                                contentType: 'image/png',
+                                            };
+                                            uploadBytes(storageRef, newPFP, metadata).then((im) => {
+                                                localStorage.setItem("openGroup", localStorage.getItem("editGroup"));
+                                                window.location.href="groupPage.html"
+                                            })
+                                        } else {
+                                            localStorage.setItem("openGroup", localStorage.getItem("editGroup"));
+                                            window.location.href="groupPage.html"
+                                        }
                                     })
                                 })
                             })
@@ -185,11 +199,12 @@
                         // Warn group name must be 5-20 charachters
                     }
                 } else {
-                    console.log("fai2l")
+                        document.getElementById("editWarnings").innerHTML="Over 300 Charachter Description"
+                        document.getElementById("editWarnings").setAttribute("style", "")
                     // Warn description exceeds 300 Charachter limit
                 }
             }
-            document.getElementById("editGroup").addEventListener("click", () => {editNewGroup(document.getElementById("groupNameFeild").value, document.getElementById("groupDescFeild").value, document.getElementById("memberLimitEdit").value)})
+            document.getElementById("editGroup").addEventListener("click", () => {editNewGroup(document.getElementById("groupNameFeild").value, document.getElementById("groupDescFeild").value, document.getElementById("memberLimitEdit").value, document.getElementById("groupLogoEdit").files[0])})
         </script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     </header>
@@ -247,7 +262,7 @@
                             <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Logo</b></span>
                         </td>
                         <td>
-                            <input type ="file" accept = "image/png" style = "margin-left:30px;" >
+                            <input id="groupLogoEdit" type ="file" accept = "image/png" style = "margin-left:30px;" >
                         </td>
                     </tr> 
                     
