@@ -111,43 +111,54 @@
                 if (snapshot.exists()) {
                     if (snapshot.val().logins >= 3){
                         document.getElementById("llbBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("llbWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().logins >= 5){
                         document.getElementById("llsBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("llsWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().logins == 14){
                         document.getElementById("llgBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("llgWhole").style.backgroundColor = `#D1E8E2`;
                     }
-
                     
                     if (snapshot.val().staticShower >= 1){
                         document.getElementById("ss1Badge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ss1Whole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().staticShower >= 3){
                         document.getElementById("ss2Badge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ss2Whole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().staticShower == 5){
                         document.getElementById("ss3Badge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ss3Whole").style.backgroundColor = `#D1E8E2`;
                     }
                     
                     if (snapshot.val().compostConqueror >= 1){
                         document.getElementById("ccbBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ccbWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().compostConqueror >= 3){
                         document.getElementById("ccsBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ccsWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().compostConqueror == 5){
                         document.getElementById("ccgBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ccgWhole").style.backgroundColor = `#D1E8E2`;
                     }
 
                     if (snapshot.val().antiCarbonCruiser >= 1){
                         document.getElementById("accBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("accWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().trasherBasher >= 1){
                         document.getElementById("tbBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("tbWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     if (snapshot.val().plasticPurger >= 1){
                         document.getElementById("ppBadge").innerHTML = `<div style="color:#026652"><span class="material-symbols-rounded" style="color:#026652">done</span>Complete</div>`;
+                        document.getElementById("ppWhole").style.backgroundColor = `#D1E8E2`;
                     }
                     
                     document.getElementById("badgesPage").setAttribute("style", "margin-top:95px;");
@@ -185,28 +196,28 @@
                 <h1 style="font-family:'Quicksand', cursive;">BADGES:</h1>
                 <table>
                     <tr class="centerContainer" style="width:1200px;margin-bottom:10px;">
-                        <td style="background-color:#D1E8E2;border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="llbWhole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Login Leader Bronze<br>Log In 3 Days in a Row</div>
                             </div>
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id="llbBadge">Incomplete</div>
                         </td>
-                        <td style="background-color:#D1E8E2;border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="llsWhole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Login Leader Silver<br>Log In 5 Days in a Row</div>
                             </div>
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id ="llsBadge">Incomplete</div>
                         </td>
-                        <td style="background-color:#D1E8E2;border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="llgWhole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Login Leader Gold<br>Log In 2 Weeks in a Row</div>
                             </div>                            
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id ="llgBadge">Incomplete</div>
                         </td>
-                        <td style="background-color:#D1E8E2;border-radius:2px; box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ppWhole" style="background-color:rgb(200,200,200);border-radius:2px; box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Plastic Purger<br>Complete a Plastic Saving Challenge</div>
@@ -215,28 +226,28 @@
                         </td>
                     </tr>
                     <tr class="centerContainer" style="width:1200px;margin-bottom:10px;">
-                        <td style="background-color:#D1E8E2;border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ss1Whole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Static Shower-er<br>Complete a Water saving challenge</div>
                             </div>
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id="ss1Badge">Incomplete</div>
                         </td>
-                        <td style="background-color:#D1E8E2;border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ss2Whole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Static Shower-er Level 2<br>Complete 3 Water saving challenges</div>
                             </div>
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id ="ss2Badge">Incomplete</div>
                         </td>
-                        <td style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ss3Whole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Static Shower-er Level 3<br>Complete 5 Water saving challenges</div>
                             </div>                            
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id ="ss3Badge">Incomplete</div>
                         </td>
-                        <td style="background-color:rgb(200,200,200);border-radius:2px; box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="tbWhole" style="background-color:rgb(200,200,200);border-radius:2px; box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Trasher Basher<br>Complete a Trash-Based Challenge</div>
@@ -245,7 +256,7 @@
                         </td>
                     </tr>
                     <tr class="centerContainer" style="width:1200px;margin-bottom:10px;">
-                        <td style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ccbWhole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Compost Conquerer Bronze<br>Complete 1 Composting Challenge
@@ -253,21 +264,21 @@
                             </div>
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id = "ccbBadge">Incomplete</div>
                         </td>
-                        <td style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ccsWhole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Compost Conquerer Silver<br>Complete 3 Composting Challenges</div>
                             </div>
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id ="ccsBadge">Incomplete</div>
                         </td>
-                        <td style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="ccgWhole" style="background-color:rgb(200,200,200);border-radius:2px;margin-right:27px;box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Compost Conquerer Gold<br>Complete 5 Composting Challenges</div>
                             </div>                            
                             <div style="width:100%;text-align:center;color:#282828;padding-top:5px;padding-bottom:5px;font-family:'Quicksand', cursive;font-size:20px;" id ="ccgBadge">Incomplete</div>
                         </td>
-                        <td style="background-color:rgb(200,200,200);border-radius:2px; box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
+                        <td id="accWhole" style="background-color:rgb(200,200,200);border-radius:2px; box-shadow: 0 0 0px #282828, 0 0 5px #282828, 0 0 5px #282828;width:277.5px;height:160px;">
                             <div class="centerContainer">
                                 <img style="width:100px;height:100px;border-radius:50%;padding:10px" src="static.png">
                                 <div style="padding:10px;font-family:'Bebas Neue', sans-serif;text-align:center">Anti-Carbon-Cruiser<br>Complete a Carpooling Challenge</div>
