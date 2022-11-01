@@ -189,50 +189,52 @@
                 get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
                     let taken = true;
                     for (var i = 1; i < 11; i++){
-                        if (snapshot.val()["groups"][`number${i}`]=="None"){
-                            taken=false;
-                            get(child(dbRef, `groupCodes/${groupCode}`)).then((groupId) => {
-                                groupId=groupId.val()
-                                console.log(groupCode)
-                                console.log(groupId)
-                                get(child(dbRef,  `groups/${groupId}`)).then((group) => {
-                                    if (localStorage.getItem("userID") in group.val()['memberList']){
-                                        document.getElementById("joinWarnings").innerHTML="Already in this group!"
-                                        document.getElementById("joinWarnings").setAttribute("style", "")
-                                    } else if (group.val()['memberLimit']==Object.keys(group.val()['memberList']).length){
-                                        document.getElementById("joinWarnings").innerHTML="Group has reached its limit"
-                                        document.getElementById("joinWarnings").setAttribute("style", "")
-                                    } else {
-                                        return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), groupId).then(() => {
-                                            get(ref(db, `groups/${groupId}/memberList`)).then((listOfMem) => {
-                                                console.log(listOfMem.val())
-                                                let thedict = listOfMem.val()
-                                                
-                                                get(ref(db, `users/${localStorage.getItem("userID")}`)).then((username) => {
-                                                    username = username.val()["username"]
-                                                    console.log(username)
-                                                    thedict[localStorage.getItem("userID")] = username
-                                                    get(ref(db, `groups/${groupId}/memberList`)).then((username) => {
-                                                        console.log(username.val())
-                                                        console.log(thedict)
-                                                    })
-                                                    return set(ref(db, `groups/${groupId}/memberList`), thedict).then(() => {
-                                                        console.log("yes")
-                                                        localStorage.setItem("openGroup", groupId)
-                                                        window.location.href="groupPage.html"
+                        if(taken){
+                            if (snapshot.val()["groups"][`number${i}`]=="None"){
+                                taken=false;
+                                get(child(dbRef, `groupCodes/${groupCode}`)).then((groupId) => {
+                                    groupId=groupId.val()
+                                    console.log(groupCode)
+                                    console.log(groupId)
+                                    get(child(dbRef,  `groups/${groupId}`)).then((group) => {
+                                        if (localStorage.getItem("userID") in group.val()['memberList']){
+                                            document.getElementById("joinWarnings").innerHTML="Already in this group!"
+                                            document.getElementById("joinWarnings").setAttribute("style", "")
+                                        } else if (group.val()['memberLimit']==Object.keys(group.val()['memberList']).length){
+                                            document.getElementById("joinWarnings").innerHTML="Group has reached its limit"
+                                            document.getElementById("joinWarnings").setAttribute("style", "")
+                                        } else {
+                                            return set(ref(db, `users/${localStorage.getItem("userID")}/groups/number${i}`), groupId).then(() => {
+                                                get(ref(db, `groups/${groupId}/memberList`)).then((listOfMem) => {
+                                                    console.log(listOfMem.val())
+                                                    let thedict = listOfMem.val()
+                                                    
+                                                    get(ref(db, `users/${localStorage.getItem("userID")}`)).then((username) => {
+                                                        username = username.val()["username"]
+                                                        console.log(username)
+                                                        thedict[localStorage.getItem("userID")] = username
+                                                        get(ref(db, `groups/${groupId}/memberList`)).then((username) => {
+                                                            console.log(username.val())
+                                                            console.log(thedict)
+                                                        })
+                                                        return set(ref(db, `groups/${groupId}/memberList`), thedict).then(() => {
+                                                            console.log("yes")
+                                                            localStorage.setItem("openGroup", groupId)
+                                                            window.location.href="groupPage.html"
+                                                        })
                                                     })
                                                 })
                                             })
-                                        })
-                                    }
+                                        }
+                                    })
+                                    // shdfbvif
+                                }).catch((error) => {
+                                    document.getElementById("joinWarnings").innerHTML="Invalid Group Code"
+                                    document.getElementById("joinWarnings").setAttribute("style", "")
+                                    console.error(error);
+                                    return;
                                 })
-                                // shdfbvif
-                            }).catch((error) => {
-                                document.getElementById("joinWarnings").innerHTML="Invalid Group Code"
-                                document.getElementById("joinWarnings").setAttribute("style", "")
-                                console.error(error);
-                                return;
-                            })
+                            }
                         }
                     }
                     if (taken){
