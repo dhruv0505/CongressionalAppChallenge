@@ -1,6 +1,6 @@
 <html>
     <header>
-        <title></title>
+        <title>EnviroGoals</title>
         <link rel="stylesheet" href="style.css">
         <script type="module">
             if ((typeof localStorage.getItem("userID") !== "undefined" && !(typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined")) && window.location.href.slice(-10)=="login.html"){
@@ -188,7 +188,7 @@
             function joinGroup(groupCode){
                 get(child(dbRef, `users/${localStorage.getItem("userID")}`)).then((snapshot) => {
                     let taken = true;
-                    for (var i = 1; i < 10; i++){
+                    for (var i = 1; i < 11; i++){
                         if (snapshot.val()["groups"][`number${i}`]=="None"){
                             taken=false;
                             get(child(dbRef, `groupCodes/${groupCode}`)).then((groupId) => {
@@ -273,7 +273,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - ALL GROUPS</td>
+                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;color:rgb(200,200,200)">EnviroGoals - ALL GROUPS</td>
                     <td><div style="width:258px;display:flex;justify-content:flex-end;"><a class="navOption centerContainer tooltip2" id="logout"><div class="material-symbols-rounded" style="font-size:30px;">logout</div><span>Log Out</span></a></div></td>
                 </tr>
             </table>
@@ -287,19 +287,23 @@
                         <table class="centerContainer"  style="background-color: rgba(2, 74, 168, 0.361);border-radius: 5px; padding:10px;width: 250px;margin-left:10px;box-shadow:5px 5px 5px #282828;">
                             <tr>
                                 <td style="text-align: center;">
-                                <div style = "font-size: 35px;font-family:'Quicksand', sans-serif;margin-bottom:3px">Join: </div>
+                                <div style = "font-size: 30px;font-family:'Quicksand', sans-serif;margin-bottom:3px">JOIN</div>
                                 <div id="joinWarnings" style="display:none;"></div>
                                 <div class="centerContainer">
-                                    <input maxlength="6" id="joinCode" placeholder="Enter Code" style="border-radius: 3px;border:none;width:125px;font-size:20px;height:30px;font-family:'Quicksand', sans-serif;text-align:center;text-align:center">
+                                    <input maxlength="6" id="joinCode" placeholder="Enter Code" style="margin-bottom:16.5px;border-radius: 3px;border:none;width:125px;font-size:20px;height:30px;font-family:'Quicksand', sans-serif;text-align:center;text-align:center">
                                     <div id = "joinbtn" class="centerContainer"><span class="material-symbols-rounded" style="color:rgb(89, 0, 0)">check</span></div>
                                 </div> 
                             </td>
             
                             </tr>
-                            <tr style="padding-top: 0;">
-                                <td style="margin-top: 0;text-align: center;">
-                                    <div style = "font-size: 35px;font-family:'Quicksand', sans-serif;margin-top:5px">Create: </div>
-                                    <div class="centerContainer"><a href="createGroup.html" id="createGroupAll" style="width:40px;height:30px;border-radius:30%" class="centerContainer"><span class="material-symbols-rounded" style="font-size:40px;color:rgb(89, 0, 0)">add_circle</span></a></div>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <br>
+                                    <a href="createGroup.html" style = "font-size: 30px;font-family:'Quicksand', sans-serif;margin-top:5px;">
+                                        <span id="createGroupAll" class="material-symbols-rounded" style="height:100%;color:rgb(89, 0, 0); padding:5px;border-radius:3px;padding-left:17px;padding-right:17px;">add_circle</span>&nbsp;
+                                        <div class="createAll" style="display:inline-block;height:100%;">CREATE</div>
+                                    </a>
+                                    <!-- <div class="centerContainer"><a href="createGroup.html" id="createGroupAll" style="width:40px;height:30px;border-radius:30%" class="centerContainer"></a></div> -->
                                 </td>
                             </tr>
                         </table>

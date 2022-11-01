@@ -1,6 +1,6 @@
 <html>
     <header>
-        <title></title>
+        <title>EnviroGoals</title>
         <link rel="stylesheet" href="style.css">
         <script type="module">
             if ((typeof localStorage.getItem("userID") !== "undefined" && !(typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined")) && window.location.href.slice(-10)=="login.html"){
@@ -334,7 +334,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - CREATE GROUP</td>
+                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;color:rgb(200, 200, 200)">EnviroGoals - CREATE GROUP</td>
                     <td><div style="width:258px;display:flex;justify-content:flex-end;"><a class="navOption centerContainer tooltip2" id="logout"><div class="material-symbols-rounded" style="font-size:30px;">logout</div><span>Log Out</span></a></div></td>
                 </tr>
             </table>
@@ -346,15 +346,15 @@
             <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:1px solid rgb(87, 236, 186);box-shadow:5px 5px 5px #282828;">NEW GROUP</div>
 
 
-            <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
-                <table style="height: 83;background-color: rgb(232, 61, 110);border:1px solid black;margin-left: 20px;box-shadow:5px 5px 5px #282828;border-radius:5px;">
+            <div class="stuff centerContainer" style="float:left;margin-top: 15px;">
+                <table style="height: 83;background-color: rgb(232, 61, 110);border:1px solid black;margin-left: 20px;box-shadow:5px 5px 5px #282828;border-radius:5px;padding:5px;">
                     
                     <tr >
                         <td>                        
                             <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Group Name</b></span>
                         </td>
                         <td>
-                            <input id="groupNameFeild" type ="text" maxlength="10" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:600px;margin-right: 6px;padding: 10px;" required>
+                            <input id="groupNameFeild" type ="text" maxlength="10" placeholder="Group Name" style = "font-family: Courier, monospace;font-size: 21;margin-left:30px;height:30px;border-color: black; border-radius:2px;border:2px solid;width:546px;margin-right: 6px;padding: 10px;" required>
                         </td>
                     </tr> 
                     <tr>
@@ -381,10 +381,10 @@
 
 
             
-            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;margin-top: 20px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:1px solid rgb(87, 236, 186);margin-top: 312px;box-shadow:5px 5px 5px #282828;">SETTINGS</div>
+            <div style = "font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:29px;margin-left: 5px;background-color: aquamarine; padding: 5px; border-radius: 5px;border:1px solid rgb(87, 236, 186);margin-top: 350px;box-shadow:5px 5px 5px #282828;">SETTINGS</div>
 
 
-            <div class="stuff centerContainer" style="float:left;margin-top: 10px;">
+            <div class="stuff centerContainer" style="float:left;margin-top: 15px;">
                 <table style="height: 83;background-color: rgb(232, 61, 110);border-radius: 8px;margin-left: 20px;padding: 5px;box-shadow:5px 5px 5px #282828;border:1px solid">
                     
                     <!-- <tr>
@@ -452,7 +452,7 @@
                 <br>
                 <br>
                 <br>
-                <div id="createGroup" style="width:115px;margin-top: 30px;border: 3px solid rgb(7, 182, 182);margin-left: 5px;background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;"><label style="font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">CREATE</label></div>  
+                <div id="createGroup" class="ishuButton" style="width:115px;margin-top: 30px;margin-left: 5px;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;"><label style="font-size:32px;">CREATE</label></div>  
             </div>    
         </div></div> 
         </div>

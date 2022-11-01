@@ -1,4 +1,22 @@
 /* FONTS */
+  /* latin-ext */
+  @font-face {
+    font-family: 'Staatliches';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/staatliches/v11/HI_OiY8KO6hCsQSoAPmtMYeVvpCNOw.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+    font-family: 'Staatliches';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/staatliches/v11/HI_OiY8KO6hCsQSoAPmtMYebvpA.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
 @font-face {
     font-family: 'Bebas Neue';
     font-style: normal;
@@ -69,8 +87,19 @@
 input {
     margin-top: 1rem;
 }
-
-input::file-selector-button {
+input::file-selector-button{
+    color: black;
+    padding: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size:20px;
+    background-color: rgba(43, 126, 235, 0.7);
+    border: thin solid grey;
+    border-radius: 3px;
+}
+input::file-selector-button:hover{
+    background-color: rgba(43, 126, 235, 0.9);
+}
+#fileProfile input::file-selector-button {
     color: black;
     padding: 10px;
     font-family: 'Bebas Neue', sans-serif;
@@ -79,7 +108,7 @@ input::file-selector-button {
     border: thin solid grey;
     border-radius: 3px;
 }
-input::file-selector-button:hover {
+#fileProfile input::file-selector-button:hover{
     background-color: rgba(10, 70, 148, 0.7);
 }
 
@@ -402,7 +431,15 @@ a.tooltip2:hover span {
 }
 
 .user-name {
-    width: 300px;
+    width: 250px;
+    font-size: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.user-name-2 {
+    font-weight: bold;
+    text-transform: capitalize;
+    width: 150px;
     font-size: 30px;
     font-family: 'Bebas Neue', sans-serif;
 }
@@ -506,7 +543,7 @@ a.tooltip2:hover span {
 /* GROUP PAGE */
 .groupPageDashboard{
     display:grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 38% 58%;
     grid-template-rows: 350px 350px 25px auto;
     row-gap:10px;
     column-gap:25px;
@@ -616,8 +653,9 @@ input:focus{
 #myInput{
     width:500px;
     height:50px;
-    font-size:40px;
-    padding:5px;
+    font-size:35px;
+    border-radius:4px;
+    padding:10px;
     font-family: "Quicksand", sans-serif;
 }
 .dropdown {
@@ -671,4 +709,21 @@ input:focus{
 
 .icon-item:not(:first-child) {
     margin-left: 5px;
+}
+
+
+.ishuButton{
+    background-color:rgb(200,200,200);
+    border:1px solid black;
+    font-family: 'Bebas Neue', sans-serif;
+    text-align:center;
+    padding:5px;
+}
+.ishuButton:hover{
+    background-color: rgb(170,170,170);
+}
+
+.createAll:hover{
+    text-decoration:underline;
+    color:rgb(0, 60, 138);
 }

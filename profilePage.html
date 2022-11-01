@@ -1,6 +1,6 @@
 <html>
     <header>
-        <title></title>
+        <title>EnviroGoals</title>
         <link rel="stylesheet" href="style.css">
         <script type="module">
             if ((typeof localStorage.getItem("userID") !== "undefined" && !(typeof localStorage.getItem("userID") === "string" && localStorage.getItem("userID")=="undefined")) && window.location.href.slice(-10)=="login.html"){
@@ -217,7 +217,7 @@
                 input = document.getElementById("myInput");
                 document.getElementById("myDropdown").setAttribute("style", "display:none;");
                 document.getElementById("myDropdown").innerHTML="";
-                if (input.value.length>=5){
+                if (input.value.length>=1){
                     let filter = input.value.toUpperCase();
                     get(child(dbRef, 'usernames')).then((snapshot) =>{
                         let a = Object.keys(snapshot.val());
@@ -357,7 +357,7 @@
                             </tr>
                         </table>
                     </td>
-                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;">THE PLANET CHALLENGE - PROFILE PAGE</td>
+                    <td style="padding-top:3px;padding-right:30px;font-size:45px;width:100%;text-align:center;color:rgb(200,200,200)">EnviroGoals - PROFILE PAGE</td>
                     <td><div style="width:258px;display:flex;justify-content:flex-end;"><a class="navOption centerContainer tooltip2" id="logout"><div class="material-symbols-rounded" style="font-size:30px;">logout</div><span>Log Out</span></a></div></td>
                 </tr>
             </table>
@@ -413,8 +413,8 @@
                 </span> -->
                     <div style="display:flex;justify-content:center;align-items:flex-start;width:500px;height:300px;">
                         <div class="dropdown">
-                            <div style="font-size:50px;font-family:'Bebas Neue', sans-serif;">Search for another user!</div>
-                            <input type="text" autocomplete="off" placeholder="Search..." id="myInput">
+                            <div style="margin-top:20px;font-size:50px;font-family: 'Staatliches', cursive;">Search for another user</div>
+                            <input type="text" autocomplete="off" placeholder="Search" id="myInput">
                             <div id="myDropdown" class="dropdown-content" style="display:none">
                             </div>
                         </div>
@@ -494,7 +494,7 @@
                             
                             <tr style="margin-bottom:10px;">
                                 <td>                        
-                                    <span style="font-family: 'Quicksand', serif;font-size:24px;margin-left: 5px;padding:5px;"><b>New Username</b></span>
+                                    <span style="font-family: 'Quicksand', serif;font-size:24px;margin-left: 5px;padding:5px;"><b>Username</b></span>
                                 </td>
                                 <td>
                                     <input id="usernameSettings" type ="text" placeholder="New Username" style = "font-family: Quicksand, sans-serif;font-size: 21px;margin-left:30px;height:50px;border:none; border-radius:4px;width:600px;border:1px solid;margin-right: 6px;padding: 10px;background-color:rgba(20, 80, 158, 0.1)" required>
@@ -502,7 +502,7 @@
                             </tr>
                             <tr style="margin-top:10px;">
                                 <td>                        
-                                    <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>New Email</b></span>
+                                    <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Email</b></span>
                                 </td>
                                 <td>
                                     <input id="newEmailSettings" type ="text"  placeholder="New Email" style = "font-family: Quicksand, sans-serif;font-size: 21px;margin-left:30px;height:50px;border:none; border-radius:4px;width:600px;border:1px solid;margin-right: 6px;padding: 10px;background-color:rgba(20, 80, 158, 0.1)" required>
@@ -530,13 +530,15 @@
                                     <span style="margin-top:10px;vertical-align: middle;font-family: 'Quicksand', serif;color:rgb(0, 0, 0);font-size:24px;margin-left: 5px;margin-top: 20; padding: 5px; border-radius: 5px;"><b>Profile Picture</b></span>
                                 </td>
                                 <td>
-                                    <input type ="file" id="newPFP" accept="image/png" style = "margin-left:30px;">
+                                    <div id="fileProfile">
+                                        <input type ="file" id="newPFP" accept="image/png" style = "margin-left:30px;">
+                                    </div>
                                 </td>
                             </tr> 
                             
                         </table>
                         </div>
-                        <div style ="width:1200px;height:120px" class = "centerContainer"><div id="updateProfile" style="text-align:center;padding:10px;cursor:pointer;border: 3px solid rgb(7, 182, 182);background-color: aqua;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;width:300px;font-family: 'Bahnschrift', sans-serif;color:rgb(0, 0, 0);font-size:32px;">UPDATE</div></div>     
+                        <div style ="width:1200px;height:120px" class = "centerContainer"><div id="updateProfile" class="ishuButton" style="text-align:center;padding:10px;cursor:pointer;border-radius: 5px;padding: 5px;padding-left: 8px;padding-right: 8px;padding-bottom: 0px;width:300px;font-size:32px;">UPDATE</div></div>     
                     </div>    
                     </div>
                 </div>
